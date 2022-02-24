@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {useAlert} from '../hook';
 import React, {createContext, useEffect, useState, useRef} from 'react';
 import {Text, View} from 'react-native';
@@ -10,6 +11,8 @@ const {Provider} = AppContext;
 function AppProvider({children}: any) {
   const alert = useAlert();
   //   const { signOut } = useAuth();
+
+  console.log('children', children);
 
   const [user, setCurrentUser] = useState<any>();
   const choosenProduct = useRef<any>();
@@ -56,11 +59,7 @@ function AppProvider({children}: any) {
   };
   return (
     <>
-      <Provider value={mContext}>
-        <View style={{alignItems: 'center'}}>
-          <Text>App provider</Text>
-        </View>
-      </Provider>
+      <Provider value={mContext}>{children}</Provider>
     </>
   );
 }

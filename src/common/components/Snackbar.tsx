@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useRef, useState, useEffect, useLayoutEffect} from 'react';
-import {Text, Animated, SafeAreaView, StyleSheet} from 'react-native';
+import {Text, Animated} from 'react-native';
 import {
   DURATION_INFINITY,
   DURATION_LONG,
@@ -21,15 +21,7 @@ type TSnackbar = {
   backgroundColor?: string;
 };
 
-function Snackbar({
-  type,
-  visible,
-  action,
-  duration,
-  onDismiss,
-  children,
-  backgroundColor,
-}: TSnackbar) {
+function Snackbar({type, visible, duration, onDismiss}: TSnackbar) {
   const {current: opacity} = useRef(new Animated.Value(0.0));
   const [hidden, setHidden] = useState<boolean>(!visible);
   const hideTimeout = useRef<NodeJS.Timeout>();
