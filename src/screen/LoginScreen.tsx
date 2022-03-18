@@ -1,18 +1,25 @@
 import React from 'react';
-import {Button, StyleSheet, View} from 'react-native';
-import AnimatedLottieView from 'lottie-react-native';
-import lottie from '../../assets/lottie';
-import {transparent} from '../common/colors';
+import {StyleSheet, View} from 'react-native';
+import {blue100, transparent} from '../common/colors';
+import TeamTouchable from '../common/components/TeamTouchable';
+import TextView from '../common/components/TextView';
 
-export default function SplashScreen({navigation}: any) {
+export default function LoginScreen({navigation}: any) {
   return (
     <View style={styles.lottieContainer}>
-      <AnimatedLottieView
-        source={lottie.logoAnimation}
-        style={styles.lottie}
-        autoPlay
-      />
-      <Button title="Go Home" onPress={() => navigation.navigate('Main')} />
+      <TextView large bold>
+        LOgin View
+      </TextView>
+      <TeamTouchable onPress={() => navigation.navigate('Main')}>
+        <View
+          style={{
+            padding: 20,
+            margin: 10,
+            backgroundColor: blue100,
+          }}>
+          <TextView>Back</TextView>
+        </View>
+      </TeamTouchable>
     </View>
   );
 }

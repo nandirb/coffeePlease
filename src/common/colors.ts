@@ -3,8 +3,10 @@ const colorWhite = '#FFFFFF';
 const colorLightGray = '#AAA';
 
 // Core colors
-const colorPrimary = '#FBDEA6';
-const colorSecondary = '#fda50f';
+const primaryLight = '#FBDEA6';
+const primary = '#FBB57F';
+const primaryDark = '#5E3312';
+const secondary = '#767769';
 
 const colorError = '#FF4949';
 const colorWarn = '#FFC82C';
@@ -288,11 +290,13 @@ export const grey900 = '#212121';
 export const black = '#000000';
 export const white = '#ffffff';
 
-const buttonColorArray = [colorPrimary, colorSecondary];
+const buttonColorArray = [primary, primaryDark];
 
 export default {
-  colorPrimary,
-  colorSecondary,
+  primary,
+  primaryLight,
+  primaryDark,
+  secondary,
   colorError,
   colorWarn,
   colorSuccess,

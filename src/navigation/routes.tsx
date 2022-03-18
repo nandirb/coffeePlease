@@ -1,121 +1,100 @@
-/* eslint-disable react-native/no-inline-styles */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {createStackNavigator} from '@react-navigation/stack';
-import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {AppProvider} from '../provider';
-import TestScreen from '../screen/TestScreen';
-import SplashScreen from '../screen/SplashScreen';
-import {View, Text, Button, StyleSheet} from 'react-native';
-import {isIphoneWithNotch} from '../utils/utils';
-import colors, {brown200, brown300} from '../common/colors';
-
+import colors, {brown300} from '../common/colors';
+import LoginScreen from '../screen/LoginScreen';
+import Home from '../screen/Home';
+import HelpScreen from '../screen/HelpScreen';
+import Store from '../screen/store/Store';
+import Order from '../screen/order/Order';
+import Card from '../screen/Card';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from '../common/components/Icon';
 type StackParamList = {
   Splash: undefined;
-  Initial: undefined;
   Main: undefined;
-  Coffee: undefined;
+  Profile: undefined;
   Order: undefined;
+  MyOrders: undefined;
   Store: undefined;
-  Test: undefined;
+  Login: undefined;
+  Help: undefined;
+  Notification: undefined;
+  Card: undefined;
 };
 
-const Stack = createStackNavigator<StackParamList>();
 const RootStack = createStackNavigator<StackParamList>();
-const Drawer = createDrawerNavigator<StackParamList>();
 const Tab = createBottomTabNavigator();
 
-type IRoute = {
-  loggedUser?: any;
-  fcmToken?: any;
-};
-type IAction = {
-  type: string;
-  token?: string | null;
-};
-
-function HomeTabs() {
+function HomeTab() {
   return (
     <Tab.Navigator
-      initialRouteName="Home"
-      screenOptions={({route}) => ({
+      initialRouteName="Order"
+      screenOptions={() => ({
         tabBarActiveTintColor: brown300,
         tabBarInactiveTintColor: 'gray',
         headerShown: true,
-        tabBarIcon: ({focused, color, size}) => {
-          let iconName;
-
-          if (route.name === 'Home') {
-            iconName = focused
-              ? 'ios-information-circle'
-              : 'ios-information-circle-outline';
-          } else if (route.name === 'Settings') {
-            iconName = focused ? 'ios-list-box' : 'ios-list';
-          }
-
-          // You can return any component that you like here!
-          return <View />;
-        },
       })}>
       <Tab.Screen
         name="Home"
-        component={HomeScreen}
+        component={Home}
         options={{
           tabBarLabel: 'Home',
-          tabBarBadge: 3,
+          tabBarIcon: () => (
+            <Icon name="home" size={18} color={colors.primary} />
+          ),
         }}
       />
       <Tab.Screen
         name="Order"
-        component={OrderScreen}
+        component={Order}
         options={{
           tabBarLabel: 'Order',
         }}
       />
       <Tab.Screen
         name="Store"
-        component={StoreScreen}
+        component={Store}
         options={{
           tabBarLabel: 'Store',
+        }}
+      />
+      <Tab.Screen
+        name="Help"
+        component={HelpScreen}
+        options={{
+          tabBarLabel: 'Help',
         }}
       />
     </Tab.Navigator>
   );
 }
 
-function OrderScreen() {
-  return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text>Order Screen</Text>
-    </View>
-  );
-}
-
-function StoreScreen() {
-  return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text>Store Screen</Text>
-    </View>
-  );
-}
-function HomeScreen() {
-  return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text>Home Screen</Text>
-    </View>
-  );
-}
 export default function Routes() {
   return (
     <NavigationContainer>
       <AppProvider>
         <RootStack.Navigator>
+          {/* <RootStack.Screen
+            name="Splash"
+            component={SplashScreen}
+            options={{headerShown: false}}
+          /> */}
           <RootStack.Screen
             name="Main"
-            component={HomeTabs}
+            component={HomeTab}
+            options={{headerShown: false}}
+          />
+          <RootStack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{headerShown: false}}
+          />
+          <RootStack.Screen
+            name="Card"
+            component={Card}
             options={{headerShown: false}}
           />
         </RootStack.Navigator>
@@ -123,43 +102,3 @@ export default function Routes() {
     </NavigationContainer>
   );
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  navigatorContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-  },
-  navigator: {
-    borderTopWidth: 0,
-    backgroundColor: 'transparent',
-    elevation: 30,
-  },
-  xFillLine: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 30,
-  },
-  button: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 55,
-    height: 55,
-    borderRadius: 30,
-    paddingVertical: 0,
-    paddingHorizontal: 0,
-  },
-  middleBtnContainer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: isIphoneWithNotch() ? 75 : 55,
-    alignItems: 'center',
-    zIndex: 1,
-  },
-});

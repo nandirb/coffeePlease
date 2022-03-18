@@ -19,4 +19,15 @@ const isIphoneWithNotch = () => {
   );
 };
 
-export {isIphoneWithNotch};
+const deviceHeight = Dimensions.get('window').height;
+const deviceWidth = Dimensions.get('window').width;
+
+const setNavigationHome = ({navigation, headerLeft, headerRight}: any) => {
+  navigation.setOptions({
+    headerLeft: () => headerLeft,
+    headerRight: () => headerRight,
+    headerTitle: () => null,
+  });
+};
+
+export {isIphoneWithNotch, setNavigationHome, deviceHeight, deviceWidth};
