@@ -3,26 +3,22 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {AppProvider} from '../provider';
-import colors, {brown300} from '../common/colors';
+import {brown300} from '../common/colors';
 import LoginScreen from '../screen/LoginScreen';
 import Home from '../screen/Home';
-import HelpScreen from '../screen/HelpScreen';
+import HelpScreen from '../screen/AboutScreen';
 import Store from '../screen/store/Store';
-import Order from '../screen/order/Order';
-import Card from '../screen/Card';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Icon from '../common/components/Icon';
+
 type StackParamList = {
   Splash: undefined;
   Main: undefined;
   Profile: undefined;
-  Order: undefined;
+  Cart: undefined;
   MyOrders: undefined;
   Store: undefined;
   Login: undefined;
   Help: undefined;
   Notification: undefined;
-  Card: undefined;
 };
 
 const RootStack = createStackNavigator<StackParamList>();
@@ -42,30 +38,27 @@ function HomeTab() {
         component={Home}
         options={{
           tabBarLabel: 'Home',
-          tabBarIcon: () => (
-            <Icon name="home" size={18} color={colors.primary} />
-          ),
         }}
       />
       <Tab.Screen
         name="Order"
-        component={Order}
+        component={Store}
         options={{
           tabBarLabel: 'Order',
         }}
       />
       <Tab.Screen
-        name="Store"
+        name="Cart"
         component={Store}
         options={{
-          tabBarLabel: 'Store',
+          tabBarLabel: 'Cart',
         }}
       />
       <Tab.Screen
         name="Help"
         component={HelpScreen}
         options={{
-          tabBarLabel: 'Help',
+          tabBarLabel: 'About',
         }}
       />
     </Tab.Navigator>
@@ -90,11 +83,6 @@ export default function Routes() {
           <RootStack.Screen
             name="Login"
             component={LoginScreen}
-            options={{headerShown: false}}
-          />
-          <RootStack.Screen
-            name="Card"
-            component={Card}
             options={{headerShown: false}}
           />
         </RootStack.Navigator>

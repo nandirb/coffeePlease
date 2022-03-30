@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-native/no-inline-styles */
 import {useNavigation} from '@react-navigation/core';
 import React from 'react';
@@ -46,7 +47,7 @@ const HeaderRight: React.FC<any> = ({onPress, isCard}) => {
         </View>
         {/* )} */}
       </TeamTouchable>
-      {isCard && (
+      {/* {isCard && (
         <TeamTouchable
           style={{
             padding: 7,
@@ -57,9 +58,9 @@ const HeaderRight: React.FC<any> = ({onPress, isCard}) => {
             height: 30,
           }}
           onPress={() => navigation.navigate('Card')}>
-          <TextView>C</TextView>
+          <TextView>Card</TextView>
         </TeamTouchable>
-      )}
+      )} */}
     </View>
   );
 };

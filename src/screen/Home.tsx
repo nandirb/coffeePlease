@@ -1,26 +1,38 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
-import {Image, StyleSheet, View} from 'react-native';
-import colors, {white} from '../common/colors';
+import {StyleSheet, View} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
+import {primary, white} from '../common/colors';
+import Card from '../common/components/Card';
 import TextView from '../common/components/TextView';
-import {deviceWidth} from '../utils/utils';
+import Product from './store/Product';
+import img from '../../assets/images/index';
+import {styles as StoreStyle} from './store/Store';
 
 export default function Home({navigation}: any) {
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.header}>
-        <TextView xxlarge bold style={{color: colors.primaryDark}}>
-          Jack's Coffee
+        <TextView style={{color: '#8A8A8E'}}>Good morning,</TextView>
+        <TextView bold large>
+          Nandir Batmunkh
         </TextView>
-        <TextView small italic style={{color: colors.primaryLight}}>
-          Wake up and smell the coffee
-        </TextView>
+
+        <Card style={styles.card}>
+          <TextView bold color={white}>
+            za neg card bnaa
+          </TextView>
+        </Card>
+        <View style={StoreStyle.productContainer}>
+          <Product
+            name={'Smoothie Strawberry'}
+            price={8500}
+            cal={'450 cal'}
+            // source={img.smoothieStraw}
+          />
+        </View>
       </View>
-      <Image
-        style={styles.image}
-        source={require('../../assets/images/about1.jpeg')}
-      />
-    </View>
+    </ScrollView>
   );
 }
 
@@ -28,36 +40,6 @@ const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: white},
   header: {
     padding: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'column',
-    width: deviceWidth,
   },
-  productContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    overflow: 'hidden',
-    padding: 10,
-  },
-  image: {
-    resizeMode: 'cover',
-    width: deviceWidth,
-    height: 100,
-  },
-  statusContainer: {
-    position: 'absolute',
-    bottom: 30,
-    right: 0,
-    left: 0,
-  },
-  loadingContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  lottie: {
-    width: 300,
-    height: 300,
-  },
+  card: {height: 80, width: 200, backgroundColor: primary},
 });

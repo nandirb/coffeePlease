@@ -1,16 +1,12 @@
-const colorBlack = '#000000';
-const colorWhite = '#FFFFFF';
-const colorLightGray = '#AAA';
-
 // Core colors
-const primaryLight = '#FBDEA6';
-const primary = '#FBB57F';
-const primaryDark = '#5E3312';
-const secondary = '#767769';
+export const primaryLight = '#FBDEA6';
+export const primary = '#FE6E4C';
+export const primaryDark = '#5E3312';
+export const secondary = '#767769';
 
-const colorError = '#FF4949';
-const colorWarn = '#FFC82C';
-const colorSuccess = '#13CE66';
+export const colorError = '#FF4949';
+export const colorWarn = '#FFC82C';
+export const colorSuccess = '#13CE66';
 
 export const transparent = 'rgba(255, 255, 255, 0)';
 
@@ -290,18 +286,4 @@ export const grey900 = '#212121';
 export const black = '#000000';
 export const white = '#ffffff';
 
-const buttonColorArray = [primary, primaryDark];
-
-export default {
-  primary,
-  primaryLight,
-  primaryDark,
-  secondary,
-  colorError,
-  colorWarn,
-  colorSuccess,
-  colorWhite,
-  colorBlack,
-  colorLightGray,
-  buttonColorArray,
-};
+export const buttonColorArray = [primary, primaryDark];

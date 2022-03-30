@@ -8,7 +8,7 @@ export default function LoginScreen({navigation}: any) {
   return (
     <View style={styles.lottieContainer}>
       <TextView large bold>
-        LOgin View
+        Login
       </TextView>
       <TeamTouchable onPress={() => navigation.navigate('Main')}>
         <View
