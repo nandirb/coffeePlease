@@ -1,18 +1,28 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {useAlert} from '../hook';
-import React, {createContext, useEffect, useState, useRef} from 'react';
-import {Text, View} from 'react-native';
-import {IApplication} from './types';
+import { useAlert } from '../hook';
+import React, { createContext, useEffect, useState, useRef } from 'react';
+import { Text, View } from 'react-native';
+import { IApplication } from './types';
+import { useQuery } from '@apollo/client';
+import { currentUser } from '../screen/graphql/queries';
+import Loader from '../common/components/Loader';
 
 export const AppContext = createContext({} as IApplication);
 
-const {Provider} = AppContext;
+const { Provider } = AppContext;
 
-function AppProvider({children}: any) {
+function AppProvider({ children }: any) {
   const alert = useAlert();
   //   const { signOut } = useAuth();
 
-  console.log('children', children);
+  const { data, loading } = useQuery(currentUser);
+
+  useEffect(() => {
+    if (data) {
+      setCurrentUser(data?.currentUser);
+      console.log('currentUser', data?.currentUser);
+    }
+  }, [data]);
 
   const [user, setCurrentUser] = useState<any>();
   const choosenProduct = useRef<any>();
@@ -24,7 +34,7 @@ function AppProvider({children}: any) {
 
   const setChoosenProduct = (isEdit: boolean, product: any) => {
     if (choosenProduct) {
-      choosenProduct.current = {isEdit: isEdit, product: product};
+      choosenProduct.current = { isEdit: isEdit, product: product };
     }
   };
 
@@ -33,7 +43,7 @@ function AppProvider({children}: any) {
   };
 
   const setAddedProduct = (isAdded: boolean, product: any) => {
-    addedProduct.current = {isAdded: isAdded, product: product};
+    addedProduct.current = { isAdded: isAdded, product: product };
   };
 
   const checkPermission = (action: any) => {
@@ -57,6 +67,11 @@ function AppProvider({children}: any) {
       console.log('updateUnreadNotificationCounts');
     },
   };
+
+  if (loading || !data) {
+    return <Loader />;
+  }
+
   return (
     <>
       <Provider value={mContext}>{children}</Provider>
