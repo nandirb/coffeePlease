@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {StyleSheet} from 'react-native';
-import {grey700, white} from '../colors';
-import TeamTouchable from './TeamTouchable';
+import { StyleSheet } from 'react-native';
+import { grey700, white } from '../colors';
+import Touchable from './Touchable';
 
-const Card: React.FC<any> = ({children, style, onPress}) => {
+const Card: React.FC<any> = ({ children, style, onPress }) => {
   return (
-    <TeamTouchable onPress={onPress} style={[styles.itemContainer, style]}>
+    <Touchable onPress={onPress} style={[styles.itemContainer, style]}>
       {children}
-    </TeamTouchable>
+    </Touchable>
   );
 };
 
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 10,
     shadowColor: grey700,
-    shadowOffset: {width: 2, height: 4},
+    shadowOffset: { width: 2, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
     backgroundColor: white,

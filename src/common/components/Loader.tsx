@@ -1,21 +1,25 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import AnimatedLottieView from 'lottie-react-native';
 import lottie from '../../../assets/lottie';
-import {transparent} from '../colors';
+import { transparent } from '../colors';
 
-export default function Loader() {
+const Loader = ({ isLottie }: any) => {
   return (
-    <View style={styles.lottieContainer}>
-      <AnimatedLottieView
-        source={lottie.loading}
-        style={styles.lottie}
-        autoPlay
-      />
+    <View style={styles.container}>
+      {isLottie && (
+        <View style={styles.lottieContainer}>
+          <AnimatedLottieView
+            source={lottie.loading}
+            style={styles.lottie}
+            autoPlay
+          />
+        </View>
+      )}
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   lottieContainer: {
@@ -42,4 +46,13 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
   },
+  container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+    zIndex: 1000,
+  },
 });
+
+export default Loader;

@@ -1,7 +1,8 @@
 import React from 'react';
-import {GestureResponderEvent, TouchableOpacity} from 'react-native';
+import { GestureResponderEvent, TouchableOpacity } from 'react-native';
+import { TTouchable } from '../types';
 
-const TeamTouchable: React.ForwardRefRenderFunction<unknown, any> = ({
+const Touchable: React.ForwardRefRenderFunction<unknown, TTouchable> = ({
   activeOpacity = 0.5,
   style,
   children,
@@ -37,4 +38,4 @@ const TeamTouchable: React.ForwardRefRenderFunction<unknown, any> = ({
   );
 };
 
-export default TeamTouchable;
+export default Touchable;

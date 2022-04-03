@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useRef, useState, useEffect, useLayoutEffect} from 'react';
-import {Text, Animated} from 'react-native';
+import React, { useRef, useState, useEffect, useLayoutEffect } from 'react';
+import { Text, Animated } from 'react-native';
 import {
   DURATION_INFINITY,
   DURATION_LONG,
@@ -8,8 +8,8 @@ import {
   DURATION_SHORT,
 } from '../constants';
 
-import {TAction} from '../../provider/types';
-import {View} from 'react-native';
+import { TAction } from '../../provider/types';
+import { View } from 'react-native';
 
 type TSnackbar = {
   type?: string;
@@ -21,8 +21,8 @@ type TSnackbar = {
   backgroundColor?: string;
 };
 
-function Snackbar({type, visible, duration, onDismiss}: TSnackbar) {
-  const {current: opacity} = useRef(new Animated.Value(0.0));
+const Snackbar = ({ type, visible, duration, onDismiss }: TSnackbar) => {
+  const { current: opacity } = useRef(new Animated.Value(0.0));
   const [hidden, setHidden] = useState<boolean>(!visible);
   const hideTimeout = useRef<NodeJS.Timeout>();
 
@@ -45,7 +45,7 @@ function Snackbar({type, visible, duration, onDismiss}: TSnackbar) {
         toValue: 1,
         duration: 200,
         useNativeDriver: true,
-      }).start(({finished}) => {
+      }).start(({ finished }) => {
         if (finished) {
           const isInfinity =
             duration === Number.POSITIVE_INFINITY ||
@@ -65,7 +65,7 @@ function Snackbar({type, visible, duration, onDismiss}: TSnackbar) {
         toValue: 0,
         duration: 200,
         useNativeDriver: true,
-      }).start(({finished}) => {
+      }).start(({ finished }) => {
         if (finished) {
           setHidden(true);
         }
@@ -82,7 +82,7 @@ function Snackbar({type, visible, duration, onDismiss}: TSnackbar) {
       <Text>Ene bol alert</Text>
     </View>
   );
-}
+};
 
 Snackbar.DURATION_SHORT = DURATION_SHORT;
 Snackbar.DURATION_MEDIUM = DURATION_MEDIUM;

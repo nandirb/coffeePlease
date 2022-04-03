@@ -1,32 +1,43 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useMemo, useReducer } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { AppProvider } from '../provider';
-import { brown300 } from '../common/colors';
-import LoginScreen from '../screen/LoginScreen';
-import Home from '../screen/Home';
-import HelpScreen from '../screen/AboutScreen';
-import Store from '../screen/store/Store';
+import { grey400, primary } from '../common/colors';
+
+import HomeScreen from '../screen/home/Home';
+import LoginScreen from '../screen/about/LoginScreen';
+import AboutScreen from '../screen/about/AboutScreen';
+import StoreScreen from '../screen/store/container/Store';
+import CartScreen from '../screen/cart/CartContainer';
+
 import { useMutation } from '@apollo/client';
-import { login } from '../screen/graphql/mutation';
+import { login } from '../screen/about/graphql/mutations';
 import Loader from '../common/components/Loader';
 import { AsyncStorage } from 'react-native';
 import { useAlert } from '../hook';
 import { AuthContext } from '../hook/useAuth';
+import Icon from 'react-native-vector-icons/AntDesign';
+import IconFA from 'react-native-vector-icons/FontAwesome5';
+import IconFeather from 'react-native-vector-icons/Feather';
+import ProfileContainer from '../screen/about/Profile/ProfileContainer';
+import MyOrders from '../screen/about/MyOrders/OrderDetail';
+import ProductDetailContainer from '../screen/store/container/ProductDetail';
+Icon.loadFont().then();
 
 type StackParamList = {
+  Login: undefined;
+  About: undefined;
+  LoginScreen: undefined;
   Splash: undefined;
   Main: undefined;
   Profile: undefined;
-  Cart: undefined;
   MyOrders: undefined;
   Store: undefined;
-  Login: undefined;
-  Help: undefined;
-  Notification: undefined;
-  LoginScreen: undefined;
+  Cart: undefined;
+  ProductDetail: undefined;
 };
 
 const RootStack = createStackNavigator<StackParamList>();
@@ -36,38 +47,58 @@ const Tab = createBottomTabNavigator();
 function HomeTab() {
   return (
     <Tab.Navigator
-      initialRouteName="Order"
+      initialRouteName="Home"
       screenOptions={() => ({
-        tabBarActiveTintColor: brown300,
+        tabBarActiveTintColor: primary,
         tabBarInactiveTintColor: 'gray',
         headerShown: true,
       })}>
       <Tab.Screen
         name="Home"
-        component={Home}
+        component={HomeScreen}
         options={{
           tabBarLabel: 'Home',
+          tabBarIcon: ({ focused }) => (
+            <Icon name="home" color={focused ? primary : grey400} size={25} />
+          ),
         }}
       />
       <Tab.Screen
         name="Order"
-        component={Store}
+        component={StoreScreen}
         options={{
           tabBarLabel: 'Order',
+          tabBarIcon: ({ focused }) => (
+            <IconFeather
+              name="coffee"
+              color={focused ? primary : grey400}
+              size={25}
+            />
+          ),
         }}
       />
       <Tab.Screen
-        name="Cart"
-        component={Store}
+        name="Store"
+        component={StoreScreen}
         options={{
-          tabBarLabel: 'Cart',
+          tabBarLabel: 'Store',
+          tabBarIcon: ({ focused }) => (
+            <IconFA
+              name="store"
+              color={focused ? primary : grey400}
+              size={20}
+            />
+          ),
         }}
       />
       <Tab.Screen
-        name="Help"
-        component={HelpScreen}
+        name="About"
+        component={AboutScreen}
         options={{
           tabBarLabel: 'About',
+          tabBarIcon: ({ focused }) => (
+            <IconFA name="user" color={focused ? primary : grey400} size={22} />
+          ),
         }}
       />
     </Tab.Navigator>
@@ -103,7 +134,7 @@ export default function Routes() {
     loginToken: null,
   };
 
-  const loginReducer = (prevState, action) => {
+  const loginReducer = (prevState: any, action: { type: any; token: any }) => {
     switch (action.type) {
       case 'RELOGIN':
         return {
@@ -131,7 +162,7 @@ export default function Routes() {
   const logOut = async () => {
     try {
       await AsyncStorage.removeItem('loginToken');
-      dispatch({ type: 'LOGOUT' });
+      dispatch({ type: 'LOGOUT', token: 'fgh' });
     } catch (e) {
       console.log(e);
     }
@@ -215,6 +246,26 @@ export default function Routes() {
                 name="Login"
                 component={LoginScreen}
                 options={{ headerShown: false }}
+              />
+              <RootStack.Screen
+                name="Cart"
+                component={CartScreen}
+                options={{ headerShown: true }}
+              />
+              <RootStack.Screen
+                name="ProductDetail"
+                component={ProductDetailContainer}
+                options={{ headerShown: true }}
+              />
+              <RootStack.Screen
+                name="Profile"
+                component={ProfileContainer}
+                options={{ headerShown: true }}
+              />
+              <RootStack.Screen
+                name="MyOrders"
+                component={MyOrders}
+                options={{ headerShown: true }}
               />
             </RootStack.Navigator>
           </AppProvider>

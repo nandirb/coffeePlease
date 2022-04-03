@@ -4,7 +4,7 @@ import React, { createContext, useEffect, useState, useRef } from 'react';
 import { Text, View } from 'react-native';
 import { IApplication } from './types';
 import { useQuery } from '@apollo/client';
-import { currentUser } from '../screen/graphql/queries';
+import { currentUser } from '../screen/about/graphql/queries';
 import Loader from '../common/components/Loader';
 
 export const AppContext = createContext({} as IApplication);
@@ -20,7 +20,6 @@ function AppProvider({ children }: any) {
   useEffect(() => {
     if (data) {
       setCurrentUser(data?.currentUser);
-      console.log('currentUser', data?.currentUser);
     }
   }, [data]);
 

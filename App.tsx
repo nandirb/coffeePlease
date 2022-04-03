@@ -10,16 +10,8 @@ import {
 import { onError } from '@apollo/client/link/error';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
-import React, { useEffect, useState } from 'react';
-import {
-  LogBox,
-  StatusBar,
-  View,
-  Text,
-  ActivityIndicator,
-  SafeAreaViewBase,
-  SafeAreaView,
-} from 'react-native';
+import React from 'react';
+import { LogBox, StatusBar } from 'react-native';
 import Routes from './src/navigation/routes';
 
 import {} from './src/provider';

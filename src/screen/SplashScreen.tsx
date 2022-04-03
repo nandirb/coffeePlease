@@ -1,10 +1,10 @@
 import React from 'react';
-import {Button, StyleSheet, View} from 'react-native';
+import { Button, StyleSheet, View } from 'react-native';
 import AnimatedLottieView from 'lottie-react-native';
 import lottie from '../../assets/lottie';
-import {transparent} from '../common/colors';
+import { transparent } from '../common/colors';
 
-export default function SplashScreen({navigation}: any) {
+export default function SplashScreen({ navigation }: any) {
   return (
     <View style={styles.lottieContainer}>
       <AnimatedLottieView

@@ -1,8 +1,14 @@
-import {useContext} from 'react';
-import {AppContext} from '../provider/AppProvider';
+import { createContext, useContext } from 'react';
 
-export default function useAppContext() {
-  const mContext = useContext(AppContext);
+export type IAuth = {
+  signedIn: () => void;
+  signOut: () => void;
+};
+export const AuthContext = createContext({} as IAuth);
 
-  return mContext;
+function useAuth() {
+  const auth = useContext(AuthContext);
+
+  return auth;
 }
+export default useAuth;

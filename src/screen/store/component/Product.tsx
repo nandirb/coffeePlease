@@ -1,18 +1,25 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {Image, StyleSheet, View} from 'react-native';
-import {grey600, white} from '../../common/colors';
-import Button from '../../common/components/Button';
-import TextView from '../../common/components/TextView';
+import { Image, StyleSheet, View } from 'react-native';
+import images from '../../../../assets/images';
+import { grey600, white } from '../../../common/colors';
+import { Touchable } from '../../../common/components';
+import Button from '../../../common/components/Button';
+import ImageView from '../../../common/components/ImageView';
+import TextView from '../../../common/components/TextView';
 
-const Product: React.FC<any> = ({name, price, cal, source}) => {
+const Product: React.FC<any> = ({ navigation, name, price, source, cal }) => {
   return (
     <View style={styles.container}>
-      <Image style={styles.image} source={source} />
+      <Touchable onPress={() => navigation.navigate('ProductDetail')}>
+        <Image style={styles.image} source={source} />
+      </Touchable>
+
       <View style={styles.bottom}>
         <View style={styles.description}>
           <TextView bold>{name}</TextView>
-          <TextView style={{color: grey600}}>{cal}</TextView>
+          <TextView style={{ color: grey600 }}>{cal}</TextView>
         </View>
         <View
           style={{
@@ -20,10 +27,10 @@ const Product: React.FC<any> = ({name, price, cal, source}) => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <View style={{width: 100}}>
+          <View style={{ width: 100 }}>
             <TextView bold>{price} ₮</TextView>
           </View>
-          <Button text={'+'} onPress={console.log(name, 'added')} />
+          <Button text={'+'} onPress={() => console.log(name, 'added')} />
         </View>
       </View>
     </View>
@@ -38,7 +45,7 @@ const styles = StyleSheet.create({
     height: 200,
     marginVertical: 10,
     shadowColor: '#171717',
-    shadowOffset: {width: 2, height: 4},
+    shadowOffset: { width: 2, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
     backgroundColor: white,
