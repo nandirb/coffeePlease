@@ -5,13 +5,20 @@ import { black, white, primary } from '../colors';
 import Touchable from './Touchable';
 import TextView from './TextView';
 
-const Button: React.FC<any> = ({ text, onPress, secondary, block }) => {
+const Button: React.FC<any> = ({
+  text,
+  onPress,
+  secondary,
+  block,
+  style,
+  backgroundColor,
+}) => {
   return (
     <Touchable onPress={onPress}>
       <View
         style={[
           {
-            backgroundColor: primary,
+            backgroundColor: backgroundColor || primary,
             width: 36,
             height: 36,
             borderRadius: 10,
@@ -19,6 +26,7 @@ const Button: React.FC<any> = ({ text, onPress, secondary, block }) => {
             alignItems: 'center',
           },
           block && { width: '100%' },
+          style,
         ]}>
         <TextView style={{ color: secondary ? black : white }}>{text}</TextView>
       </View>

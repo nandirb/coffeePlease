@@ -1,5 +1,5 @@
 import useAlert from './useAlert';
-import useAuth from './useApp';
+import useAuth from './useAuth';
 import useApp from './useApp';
 
-export {useAlert, useApp, useAuth};
+export { useAlert, useApp, useAuth };

@@ -4,12 +4,13 @@ const currentUser = gql(`
 query CurrentUser {
     currentUser {
       _id
-      isActive
       fullName
       email
       phoneNumber
-      avatar    
+      avatar
       address
+      point
+      reward
     }
   }
 `);
@@ -18,12 +19,13 @@ const userDetail = gql`
   query userDetail($_id: String) {
     userDetail(_id: $_id) {
       _id
-      isActive
       fullName
       email
       phoneNumber
       avatar
       address
+      point
+      reward
     }
   }
 `;

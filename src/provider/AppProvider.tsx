@@ -3,7 +3,7 @@ import { useAlert } from '../hook';
 import React, { createContext, useEffect, useState, useRef } from 'react';
 import { Text, View } from 'react-native';
 import { IApplication } from './types';
-import { useQuery } from '@apollo/client';
+import { applyNextFetchPolicy, useQuery } from '@apollo/client';
 import { currentUser } from '../screen/about/graphql/queries';
 import Loader from '../common/components/Loader';
 
@@ -13,9 +13,68 @@ const { Provider } = AppContext;
 
 function AppProvider({ children }: any) {
   const alert = useAlert();
-  //   const { signOut } = useAuth();
 
   const { data, loading } = useQuery(currentUser);
+  const [user, setCurrentUser] = useState<any>();
+  const [products, addtoCart] = useState<any>([]);
+  const [cnt, setCnt] = useState(0);
+
+  const addCart = (p: any) => {
+    const idx = products.findIndex(
+      (pr: { product: { _id: any } }) => pr.product._id === p._id,
+    );
+    if (idx === -1) {
+      addtoCart((oldArray: any) => [...oldArray, { product: p, count: 1 }]);
+    } else {
+      products[idx].count++;
+    }
+  };
+
+  const clearCart = () => {
+    addtoCart([]);
+  };
+  const getCartItems = () => {
+    return products;
+  };
+
+  let totalPrice = 0;
+
+  const [cartTotal, setCartTotal] = useState<any>(totalPrice);
+  const updateTotal = () => {
+    products.map((pr: { product: { unitPrice: number }; count: number }) => {
+      console.log('..', pr.count);
+      totalPrice = totalPrice + pr.product.unitPrice * pr.count;
+    });
+    setCartTotal(totalPrice);
+  };
+
+  useEffect(() => {
+    updateTotal();
+    console.log(totalPrice);
+  }, [totalPrice, cnt]);
+
+  const remItem = (p: any) => {
+    const idx = products.findIndex(
+      (pr: { product: { _id: any } }) => pr.product._id === p._id,
+    );
+    products.splice(idx, 1);
+  };
+
+  const updateProductCnt = (p: any, type: string) => {
+    const idx = products.findIndex(
+      (pr: { product: { _id: any } }) => pr.product._id === p._id,
+    );
+    if (type === '+') {
+      products[idx].count++;
+    }
+    if (type === '-') {
+      if (products[idx].count > 0) {
+        products[idx].count--;
+      } else {
+        remItem(p);
+      }
+    }
+  };
 
   useEffect(() => {
     if (data) {
@@ -23,53 +82,25 @@ function AppProvider({ children }: any) {
     }
   }, [data]);
 
-  const [user, setCurrentUser] = useState<any>();
-  const choosenProduct = useRef<any>();
-  const addedProduct = useRef<any>();
-
-  const getChoosenProduct = () => {
-    return choosenProduct.current;
-  };
-
-  const setChoosenProduct = (isEdit: boolean, product: any) => {
-    if (choosenProduct) {
-      choosenProduct.current = { isEdit: isEdit, product: product };
-    }
-  };
-
-  const getAddedProduct = () => {
-    return addedProduct.current;
-  };
-
-  const setAddedProduct = (isAdded: boolean, product: any) => {
-    addedProduct.current = { isAdded: isAdded, product: product };
-  };
-
-  const checkPermission = (action: any) => {
-    const allowed = (user && user?.permissionActions[action]) || false;
-    !allowed && !action.includes('show') && alert.error('Permission required');
-    return allowed;
-  };
-
   const mContext: IApplication = {
     updateUser: () => {
       console.log('updateUser');
     },
-
     currentUser: user,
-    getChoosenProduct: getChoosenProduct,
-    setChoosenProduct: (isEdit, product) => setChoosenProduct(isEdit, product),
-    getAddedProduct: getAddedProduct,
-    setAddedProduct: (isAdded, product) => setAddedProduct(isAdded, product),
     notificationCounts: 0,
     updateUnreadNotificationCounts: () => {
       console.log('updateUnreadNotificationCounts');
     },
+    cartItemCont: cnt,
+    cartProducts: products,
+    addItemCount: () => setCnt(cnt + 1),
+    addtoCart: addCart,
+    removeItem: remItem,
+    clearCart: clearCart,
+    cartTotalPrice: cartTotal,
+    updateCartTotal: updateTotal,
+    updateProductCount: updateProductCnt,
   };
-
-  if (loading || !data) {
-    return <Loader />;
-  }
 
   return (
     <>

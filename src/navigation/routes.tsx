@@ -9,7 +9,7 @@ import { grey400, primary } from '../common/colors';
 
 import HomeScreen from '../screen/home/Home';
 import LoginScreen from '../screen/about/LoginScreen';
-import AboutScreen from '../screen/about/AboutScreen';
+import AboutScreen from '../screen/about/Profile/AboutScreen';
 import StoreScreen from '../screen/store/container/Store';
 import CartScreen from '../screen/cart/CartContainer';
 
@@ -23,8 +23,11 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import IconFA from 'react-native-vector-icons/FontAwesome5';
 import IconFeather from 'react-native-vector-icons/Feather';
 import ProfileContainer from '../screen/about/Profile/ProfileContainer';
-import MyOrders from '../screen/about/MyOrders/OrderDetail';
+import MyOrders from '../screen/Order/Orders';
 import ProductDetailContainer from '../screen/store/container/ProductDetail';
+import { AppContext } from '../provider/AppProvider';
+import OrderDetail from '../screen/cart/OrderDetail';
+import ProfileScreen from '../screen/about/Profile/ProfileScreen';
 Icon.loadFont().then();
 
 type StackParamList = {
@@ -32,11 +35,12 @@ type StackParamList = {
   About: undefined;
   LoginScreen: undefined;
   Splash: undefined;
-  Main: undefined;
+  Back: undefined;
   Profile: undefined;
   MyOrders: undefined;
   Store: undefined;
   Cart: undefined;
+  OrderDetail: undefined;
   ProductDetail: undefined;
 };
 
@@ -93,7 +97,7 @@ function HomeTab() {
       />
       <Tab.Screen
         name="About"
-        component={AboutScreen}
+        component={ProfileContainer}
         options={{
           tabBarLabel: 'About',
           tabBarIcon: ({ focused }) => (
@@ -192,8 +196,7 @@ export default function Routes() {
   useEffect(() => {
     setTimeout(async () => {
       try {
-        let loginToken = await AsyncStorage.getItem('loginToken');
-
+        // let loginToken = await AsyncStorage.getItem('loginToken');
         // if (loginToken !== null) {
         //   return retrieveLoginMutation({
         //     variables: {
@@ -238,7 +241,7 @@ export default function Routes() {
             options={{headerShown: false}}
           /> */}
               <RootStack.Screen
-                name="Main"
+                name="Back"
                 component={HomeTab}
                 options={{ headerShown: false }}
               />
@@ -259,12 +262,17 @@ export default function Routes() {
               />
               <RootStack.Screen
                 name="Profile"
-                component={ProfileContainer}
+                component={ProfileScreen}
                 options={{ headerShown: true }}
               />
               <RootStack.Screen
                 name="MyOrders"
                 component={MyOrders}
+                options={{ headerShown: true }}
+              />
+              <RootStack.Screen
+                name="OrderDetail"
+                component={OrderDetail}
                 options={{ headerShown: true }}
               />
             </RootStack.Navigator>

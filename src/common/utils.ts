@@ -51,6 +51,12 @@ const isEmpty = (str: string) => {
     str.trim() === ''
   );
 };
+const truncate = (str: string) => {
+  if (str.length > 15) {
+    return str.substring(0, 14) + '...';
+  }
+  return str;
+};
 
 const getModifableArray = (array: any) => {
   return JSON.parse(JSON.stringify(array));
@@ -70,4 +76,5 @@ export {
   getNameUser,
   getModifableArray,
   numberWithCommas,
+  truncate,
 };

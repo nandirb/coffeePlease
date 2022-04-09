@@ -22,9 +22,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 10,
     shadowColor: grey700,
-    shadowOffset: { width: 2, height: 4 },
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.2,
-    shadowRadius: 3,
+    shadowRadius: 5,
     backgroundColor: white,
   },
 });

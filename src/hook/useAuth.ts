@@ -3,6 +3,7 @@ import { createContext, useContext } from 'react';
 export type IAuth = {
   signedIn: () => void;
   signOut: () => void;
+  signUp: () => void;
 };
 export const AuthContext = createContext({} as IAuth);
 

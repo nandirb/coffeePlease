@@ -183,3 +183,26 @@ export type TInput = TextInputProps & {
   error?: string;
   inputRef?: LegacyRef<TextInput>;
 };
+
+export type TCarousel = {
+  isText?: boolean;
+  data: [any];
+};
+
+export type TCategory = {
+  _id: string;
+  name: string;
+  type: string;
+};
+
+export type TProduct = {
+  _id: string;
+  name: string;
+  type: string;
+  cal: string;
+  description: string;
+  unitPrice: number;
+  createdAt: string;
+  image: string;
+  productStatus: string;
+};

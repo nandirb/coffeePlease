@@ -6,7 +6,7 @@ mutation Login($email: String!, $password: String!) {
   }
 `);
 const register = gql(`
-mutation Login($email: String!, $password: String!) {
+mutation register($email: String!, $password: String!) {
     login(email: $email, password: $password)
   }
 `);

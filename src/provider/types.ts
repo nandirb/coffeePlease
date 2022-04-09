@@ -21,13 +21,18 @@ export interface IAlert {
 }
 
 export interface IApplication {
-  updateUser: () => void;
   currentUser: any;
+  updateUser: () => void;
 
-  getChoosenProduct: () => any;
-  setChoosenProduct: (isEdit: boolean, product: any) => void;
-  getAddedProduct: () => any;
-  setAddedProduct: (isEdit: boolean, product: any) => void;
+  cartItemCont: number;
+  cartProducts: any[];
+  cartTotalPrice: number;
+  addItemCount: () => void;
+  updateProductCount: (p: any, type: string) => void;
+  removeItem: (p: any) => void;
+  addtoCart: (p: any) => void;
+  clearCart: () => void;
+  updateCartTotal: () => void;
 
   notificationCounts: any;
   updateUnreadNotificationCounts: () => void;

@@ -1,10 +1,17 @@
 import { useQuery } from '@apollo/client';
-import React from 'react';
-import { Loader } from '../../../common/components';
+import React, { useLayoutEffect } from 'react';
+import { HeaderRight, Loader } from '../../../common/components';
+import { setNavigationHome } from '../../../common/utils';
 import Store from '../component/Store';
 import { categories, products } from '../graphql/queries';
 const StoreContainer: React.FC<any> = ({ navigation, route }: any) => {
-  console.log(route);
+  useLayoutEffect(() => {
+    setNavigationHome({
+      navigation,
+      headerLeft: null,
+      headerRight: <HeaderRight />,
+    });
+  }, [navigation]);
   const { data: dataCategories, loading: loadingCategories } = useQuery(
     categories,
     {
@@ -22,8 +29,22 @@ const StoreContainer: React.FC<any> = ({ navigation, route }: any) => {
 
   const updatedProps = {
     navigation,
-    dataProducts: dataProducts?.products,
-    dataCategories: dataCategories?.categories,
+    dataCategories:
+      route.name === 'Order'
+        ? dataCategories?.categories.filter(
+            (el: { type: string }) => el.type === 'cafe',
+          )
+        : dataCategories?.categories.filter(
+            (el: { type: string }) => el.type === 'store',
+          ),
+    dataProducts:
+      route.name === 'Order'
+        ? dataProducts?.products?.filter(
+            (el: { type: string }) => el.type === 'cafe',
+          )
+        : dataProducts?.products?.filter(
+            (el: { type: string }) => el.type === 'store',
+          ),
   };
   return <Store {...updatedProps} />;
 };

@@ -6,6 +6,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import { grey700, transparent, white } from '../../colors';
 import { TMainModal } from '../../types';
 
 const MyModal: React.FC<any> = ({
@@ -57,7 +58,22 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: 'transparent',
   },
-  view: { width: '90%' },
+  view: {
+    width: '90%',
+    backgroundColor: white,
+    borderRadius: 10,
+    padding: 15,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    marginBottom: 10,
+    shadowColor: grey700,
+    shadowOffset: { width: 2, height: 3 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    borderColor: transparent,
+    borderWidth: 1,
+  },
 });
 
 export default MyModal;

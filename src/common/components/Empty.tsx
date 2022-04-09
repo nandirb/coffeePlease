@@ -1,17 +1,34 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
+import img from '../../../assets/images';
+import { grey500 } from '../colors';
 import { TEmptyView } from '../types';
+import TextView from './TextView';
 
 const Empty: React.FC<any> = ({
   textStyle,
   text,
   containerStyle,
 }: TEmptyView) => {
+  const idx = img.findIndex(el => el.name === 'empty');
+
   return (
     <View style={[styles.container, containerStyle]}>
-      <Text maxFontSizeMultiplier={1} style={[styles.text, textStyle]}>
-        {text ? text : 'There is no data'}
-      </Text>
+      <View style={{ width: 100 }}>
+        <Image
+          source={img[idx].source}
+          style={{
+            width: '100%',
+            height: undefined,
+            aspectRatio: 1,
+            borderRadius: 10,
+            opacity: 0.4,
+          }}
+        />
+      </View>
+      <TextView style={[styles.text, textStyle]}>
+        {text ? text : 'Сагс хоосон байна'}
+      </TextView>
     </View>
   );
 };
@@ -22,7 +39,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignContent: 'center',
     alignSelf: 'center',
-    flex: 1,
   },
   image: {
     height: 100,
@@ -32,7 +48,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   text: {
-    color: 'black',
+    color: grey500,
     marginTop: 10,
   },
 });

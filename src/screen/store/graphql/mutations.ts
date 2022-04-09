@@ -6,4 +6,29 @@ mutation Login($email: String!, $password: String!) {
   }
 `);
 
-export { login };
+const addProduct = gql(`
+mutation addProducts(
+    $categoryId: String
+  ) {
+    products(
+      categoryId: $categoryId
+      searchValue: $searchValue
+    ) {
+      _id
+      name
+      type
+      description
+      unitPrice
+      categoryId
+      category {
+        _id
+        name
+        type
+      }
+      createdAt
+      createdBy
+    }
+  }
+`);
+
+export { login, addProduct };

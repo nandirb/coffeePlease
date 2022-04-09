@@ -4,6 +4,7 @@ import { useMutation } from '@apollo/client';
 import React, { useState } from 'react';
 import {
   AsyncStorage,
+  Image,
   Keyboard,
   KeyboardAvoidingView,
   StyleSheet,
@@ -13,24 +14,45 @@ import {
 } from 'react-native';
 import TextView from '../../common/components/TextView';
 import useAuth from '../../hook/useAuth';
-import { login } from './graphql/mutations';
-import { Button, Touchable } from '../../common/components';
+import { login, register } from './graphql/mutations';
+import { BottomModal, Modal, Touchable } from '../../common/components';
 import { deviceWidth, ios } from '../../common/utils';
-import { black, grey400, primary, secondary, white } from '../../common/colors';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {
+  black,
+  grey400,
+  grey800,
+  primary,
+  secondary,
+  white,
+} from '../../common/colors';
+import img from '../../../assets/images';
+import { useApp } from '../../hook';
 
 export default function LoginScreen({ navigation }: any) {
-  const { signedIn } = useAuth();
+  const { signedIn, signUp } = useAuth();
+
+  const app = useApp();
 
   const [variables, setVariables] = useState<any>({
     email: 'nandir.be@gmail.com',
     password: 'Nandir123',
   });
 
+  const [variablesSignUp, setVariablesSignUp] = useState<any>({
+    email: null,
+    password: null,
+  });
+
   const [isLoading, setLoading] = useState<boolean>(false);
+  const [resigterModal, setRegisterModal] = useState<boolean>(false);
+  const [forgotPasswordModal, setForgotPasswordModal] =
+    useState<boolean>(false);
 
   const [loginMutation] = useMutation(login, {
+    variables: variables,
+  });
+
+  const [registerMutation] = useMutation(register, {
     variables: variables,
   });
 
@@ -51,10 +73,33 @@ export default function LoginScreen({ navigation }: any) {
       });
   }
 
+  function registerServer() {
+    registerMutation({
+      variables: {
+        email: variablesSignUp.email,
+        password: variablesSignUp.password,
+      },
+    })
+      .then(res => {
+        setLoading(false);
+        signUp();
+      })
+      .catch(() => {
+        console.log('The email address or password you entered is incorrect.');
+        setLoading(false);
+      });
+  }
+
   const onPressLogin = async () => {
     loginServer();
     setLoading(true);
   };
+
+  const onPressSignIn = async () => {
+    registerServer();
+    setLoading(true);
+  };
+
   const textInput = (iconName: string, placHolderText: string, value: any) => {
     return (
       <View
@@ -64,14 +109,13 @@ export default function LoginScreen({ navigation }: any) {
             backgroundColor: white,
           },
         ]}>
-        <FontAwesome name={iconName} size={20} color={primary} />
         <TextInput
           placeholder={placHolderText}
-          placeholderTextColor={grey400}
+          placeholderTextColor={grey800}
           style={{
-            padding: 10,
             color: black,
             width: '100%',
+            paddingHorizontal: 10,
           }}
           secureTextEntry={iconName === 'lock' ? true : false}
           value={value}
@@ -90,18 +134,39 @@ export default function LoginScreen({ navigation }: any) {
       </View>
     );
   };
+  const main = img.findIndex(el => el.name === 'main');
   return (
     <KeyboardAvoidingView
       style={{ flex: 1, backgroundColor: white }}
       behavior={ios ? 'padding' : 'height'}>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.container}>
+          <Image source={img[main]?.source} style={{ marginBottom: 30 }} />
           <View>
-            {textInput('user', 'Email', variables.email)}
-            {textInput('lock', 'Password', variables.password)}
+            {textInput('user', 'Имэйл', variables.email)}
+            {textInput('lock', 'Нууц үг', variables.password)}
           </View>
+
           <Touchable
-            style={[styles.block, { backgroundColor: primary }]}
+            onPress={() => setForgotPasswordModal(true)}
+            style={{
+              height: 30,
+              marginTop: 10,
+            }}>
+            <TextView
+              bold
+              small
+              style={{
+                color: primary,
+                justifyContent: 'flex-end',
+                paddingLeft: 180,
+              }}>
+              Нууц үг сэргээх
+            </TextView>
+          </Touchable>
+
+          <Touchable
+            style={[styles.block, { backgroundColor: primary, marginTop: 30 }]}
             onPress={() => {
               loginMutation()
                 .then(_e => {
@@ -114,9 +179,53 @@ export default function LoginScreen({ navigation }: any) {
                 });
             }}>
             <TextView large bold color={white}>
-              Login
+              Нэвтрэх
             </TextView>
           </Touchable>
+          <Touchable
+            style={[
+              styles.block,
+              { backgroundColor: white, borderColor: white },
+            ]}
+            onPress={() => setRegisterModal(true)}>
+            <TextView large bold color={primary}>
+              Бүртгүүлэх
+            </TextView>
+          </Touchable>
+
+          {resigterModal && (
+            <BottomModal style={{ flexDirection: 'column' }}>
+              <>
+                <Touchable onPress={() => setRegisterModal(false)}>
+                  <TextView>hide</TextView>
+                </Touchable>
+                {textInput('user', 'Имэйл', variables.email)}
+                {textInput('lock', 'Нууц үг', variables.password)}
+                <Touchable
+                  style={[
+                    styles.block,
+                    { backgroundColor: primary, marginTop: 30 },
+                  ]}
+                  onPress={() => {
+                    loginMutation()
+                      .then(_e => {
+                        AsyncStorage.setItem('loginToken', 'loggedIn', () => {
+                          signedIn();
+                        });
+
+                        console.log(_e);
+                      })
+                      .catch(e => {
+                        console.log(e);
+                      });
+                  }}>
+                  <TextView large bold color={white}>
+                    Бүртгүүлэх
+                  </TextView>
+                </Touchable>
+              </>
+            </BottomModal>
+          )}
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
@@ -131,6 +240,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
+    paddingHorizontal: 30,
   },
 
   image: {
@@ -153,7 +263,6 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
   },
-
   block: {
     borderRadius: 15,
     borderWidth: 1,

@@ -1,23 +1,29 @@
 import { useQuery } from '@apollo/client';
 import React from 'react';
 import { Loader } from '../../../common/components';
+import { useApp } from '../../../hook';
 import { userDetail } from '../graphql/queries';
-import ProfileScreen from './ProfileScreen';
+import AboutScreen from './AboutScreen';
 
-const ProfileContainer: React.FC<any> = ({ navigation }: any) => {
+const ProfileContainer: React.FC<any> = ({ navigation, route }: any) => {
+  const app = useApp();
   const { data, loading } = useQuery(userDetail, {
-    fetchPolicy: 'network-only',
+    variables: {
+      _id: app.currentUser._id,
+    },
   });
 
   if (loading) {
     return <Loader />;
   }
+  console.log(data);
 
   const updatedProps = {
     navigation,
+    route,
     dataUser: data?.userDetail,
   };
-  return <ProfileScreen {...updatedProps} />;
+  return <AboutScreen {...updatedProps} />;
 };
 
 export default ProfileContainer;

@@ -25,6 +25,10 @@ LogBox.ignoreLogs([
   'i18next',
   'NativeEventEmitter',
   '[react-native-gesture-handler]',
+  'RNVectorIconsManager',
+  'AsyncStorage',
+  'key',
+  'data',
 ]);
 
 const App: React.FC<{}> = () => {

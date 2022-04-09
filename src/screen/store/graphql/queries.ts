@@ -10,36 +10,18 @@ const categories = gql`
 `;
 
 const products = gql`
-  query products(
-    $categoryId: String
-    $searchValue: String
-    $page: Int
-    $perPage: Int
-    $userId: String
-  ) {
-    products(
-      categoryId: $categoryId
-      searchValue: $searchValue
-      page: $page
-      perPage: $perPage
-      userId: $userId
-    ) {
+  query Products {
+    products {
       _id
       name
       type
+      createdAt
+      cal
       description
       unitPrice
       categoryId
-      category {
-        _id
-        name
-        description
-        parentId
-        order
-        childCount
-      }
-      createdAt
-      createdBy
+      image
+      productStatus
     }
   }
 `;

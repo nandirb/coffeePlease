@@ -3,7 +3,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { white } from '../../../common/colors';
 import TextView from '../../../common/components/TextView';
 
-const ProfileScreen: React.FC<any> = () => {
+const ProfileScreen: React.FC<any> = ({ dataUser }) => {
+  console.log('datuser', dataUser);
   return (
     <SafeAreaView style={{ backgroundColor: white }}>
       <TextView>😍😍 My profile 😍😍</TextView>
