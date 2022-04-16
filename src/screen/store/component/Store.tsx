@@ -3,102 +3,116 @@
 import React, { useState } from 'react';
 import Carousel from 'react-native-snap-carousel';
 import { Image, StyleSheet, TextInput, View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import {
   black,
   grey100,
   grey200,
-  grey300,
   grey600,
   primary,
   white,
 } from '../../../common/colors';
 import img from '../../../../assets/images/index';
-import TextView from '../../../common/components/TextView';
-import { Button, Card, Touchable } from '../../../common/components';
+import { Touchable, TextView } from '../../../common/components';
 import Product from './Product';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Cart from '../../cart/CartScreen';
 
 const Store: React.FC<any> = ({
   navigation,
   dataCategories,
   dataProducts,
 }: any) => {
+  const [products, setProducts] = useState(dataProducts);
+  const [searchValue, setSearchValue] = useState('');
   const [filter, setFilter] = useState<any>(false);
   const [category, setCategory] = useState<any>({});
-  // const products = dataProducts;
-  const products = filter
-    ? dataProducts.filter(
-        (p: { categoryId: any }) => p.categoryId === category._id,
-      )
-    : dataProducts;
+
+  const filtered = dataProducts.filter(
+    (p: { categoryId: any }) => p.categoryId === category._id,
+  );
+
+  const searched = dataProducts.filter((p: { name: string }) =>
+    p.name.toLowerCase().includes(searchValue.toLowerCase()),
+  );
 
   const placeholder = img.findIndex(el => el.name === 'placeholder');
+  const arr = filter ? filtered : searched;
 
   const searchInput = () => {
     return (
-      <View
-        style={{
-          borderWidth: 1,
-          borderRadius: 10,
-          borderColor: grey200,
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: 50,
-          paddingHorizontal: 30,
-          margin: 10,
-        }}>
+      <View style={styles.search}>
         <Ionicons name="search" size={20} color={grey600} />
         <TextInput
+          value={searchValue}
+          onChangeText={v => {
+            setSearchValue(v);
+            setFilter(false);
+            setProducts(searched);
+          }}
           placeholder={'Хайх'}
           placeholderTextColor={grey600}
-          style={{
-            marginLeft: 10,
-            color: black,
-            width: '100%',
-          }}
+          style={styles.input}
           returnKeyType="done"
         />
       </View>
     );
   };
 
+  const renderItem = (cat: any, i: any) => {
+    return (
+      <Touchable
+        onPress={() => {
+          if (i === 0) {
+            setFilter(false);
+          } else {
+            setCategory(cat);
+            setFilter(true);
+          }
+        }}>
+        <View
+          key={'cat' + i}
+          style={{
+            padding: 10,
+            margin: 2,
+            borderColor:
+              (filter && cat.name === category.name) ||
+              (filter === false && i === 0)
+                ? primary
+                : grey100,
+            borderWidth: 1,
+            borderRadius: 10,
+          }}>
+          <TextView
+            color={
+              (filter && cat.name === category.name) ||
+              (filter === false && i === 0)
+                ? primary
+                : 'black'
+            }>
+            {cat.name}
+          </TextView>
+        </View>
+      </Touchable>
+    );
+  };
+
   return (
     <View style={styles.container}>
-      <View>
+      <View style={{ margin: 10 }}>
         {searchInput()}
-        <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
-          {dataCategories.map((cat: { _id: string; name: any }, i: any) => {
-            return (
-              <Touchable
-                onPress={() => {
-                  setCategory(cat);
-                  setFilter(true);
-                }}>
-                <View
-                  key={'cat' + i}
-                  style={{
-                    padding: 10,
-                    margin: 2,
-                    borderColor: cat.name === category.name ? primary : grey100,
-                    borderWidth: 1,
-                    borderRadius: 10,
-                  }}>
-                  <TextView
-                    color={cat.name === category.name ? primary : 'black'}>
-                    {cat.name}
-                  </TextView>
-                </View>
-              </Touchable>
-            );
-          })}
-        </View>
+        <FlatList
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.horizontalFlatlist}
+          scrollIndicatorInsets={{ right: 1 }}
+          data={[{ name: 'Бүгд' }, ...dataCategories] || []}
+          renderItem={({ item, index }) => renderItem(item, index)}
+          keyExtractor={(item, index) => index.toString()}
+        />
       </View>
       <ScrollView>
         <View style={styles.productContainer}>
-          {products.map((p: any) => {
+          {arr.map((p: any) => {
             const idx = img.findIndex(el => el.name === p?.image);
             return (
               <View key={p._id}>
@@ -131,19 +145,21 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
-  statusContainer: {
-    position: 'absolute',
-    bottom: 30,
-    right: 0,
-    left: 0,
-  },
-  loadingContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
+  search: {
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: grey200,
     flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 50,
+    paddingHorizontal: 30,
+    marginBottom: 10,
   },
-  lottie: {
-    width: 300,
-    height: 300,
+  input: {
+    marginLeft: 10,
+    color: black,
+    width: '100%',
   },
+  horizontalFlatlist: {},
 });

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import { Button, StyleSheet, View } from 'react-native';
 import AnimatedLottieView from 'lottie-react-native';
@@ -7,11 +8,11 @@ import { transparent } from '../common/colors';
 export default function SplashScreen({ navigation }: any) {
   return (
     <View style={styles.lottieContainer}>
-      <AnimatedLottieView
-        source={lottie.logoAnimation}
+      {/* <AnimatedLottieView
+        source={lottie.loading}
         style={styles.lottie}
         autoPlay
-      />
+      /> */}
       <Button title="Go Home" onPress={() => navigation.navigate('Main')} />
     </View>
   );

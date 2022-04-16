@@ -1,13 +1,13 @@
-import React, {useState, createContext} from 'react';
-import colors from '../common/colors';
+import React, { useState, createContext } from 'react';
+import { blue500, colorError, colorSuccess, green500 } from '../common/colors';
 import Snackbar from '../common/components/Snackbar';
-import {IAlert, TAction, TAlert} from './types';
+import { IAlert, TAction, TAlert } from './types';
 
 export const AlertContext = createContext({} as IAlert);
 
-const {Provider} = AlertContext;
+const { Provider } = AlertContext;
 
-function AlertProvider({children}: any) {
+function AlertProvider({ children }: any) {
   const initialAlert = {
     isOpen: false,
     message: 'This',
@@ -25,24 +25,16 @@ function AlertProvider({children}: any) {
     });
   };
 
-  const alert = (message?: string, action?: TAction) => {
-    show(message, 'simple', colors.colorSecondary, action);
-  };
-
   const info = (message?: string, action?: TAction) => {
-    show(message, 'info', colors.colorCoreBlue, action);
+    show(message, 'info', blue500, action);
   };
 
   const error = (message?: string, action?: TAction) => {
-    show(message, 'error', colors.colorError, action);
+    show(message, 'error', colorError, action);
   };
 
   const success = (message?: string, action?: TAction) => {
-    show(message, 'success', colors.colorSuccess, action);
-  };
-
-  const infinity = (message?: string, action?: TAction) => {
-    show(message, 'infinity', colors.colorCoreBlue, action);
+    show(message, 'success', colorSuccess, action);
   };
 
   const show = (
@@ -62,11 +54,9 @@ function AlertProvider({children}: any) {
   };
 
   const mContext: IAlert = {
-    alert: (message?: string, action?: TAction) => alert(message, action),
     error: (message?: string, action?: TAction) => error(message, action),
     success: (message?: string, action?: TAction) => success(message, action),
     info: (message?: string, action?: TAction) => info(message, action),
-    infinity: (message?: string, action?: TAction) => infinity(message, action),
     isShowing: () => alertState.isOpen,
   };
 

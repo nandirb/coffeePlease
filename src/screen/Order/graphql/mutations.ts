@@ -1,18 +1,33 @@
 import { gql } from '@apollo/client';
 
 const addOrder = gql`
-mutation AddOrder(
-    $deliverType: String!, 
-    $deliverAddress: String, 
-    $products: [String], 
-    $totalPrice: Int, 
-    $userId: String!) {
+  mutation AddOrder(
+    $deliverType: String!
+    $userId: String!
+    $deliverAddress: addressInput
+    $totalPrice: Int
+    $items: [productInput]
+  ) {
     addOrder(
-        deliverType: $deliverType, 
-        deliverAddress: $deliverAddress, 
-        products: $products, 
-        totalPrice: $totalPrice, 
-        userId: $userId)
-  
+      deliverType: $deliverType
+      userId: $userId
+      deliverAddress: $deliverAddress
+      totalPrice: $totalPrice
+      items: $items
+    ) {
+      items {
+        product {
+          _id
+          name
+          unitPrice
+          image
+        }
+        count
+      }
+      status
+      totalPrice
+      _id
+    }
+  }
 `;
 export { addOrder };

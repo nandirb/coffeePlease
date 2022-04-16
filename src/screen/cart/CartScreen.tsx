@@ -1,42 +1,66 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import img from '../../../assets/images';
-import { grey400, primary, white } from '../../common/colors';
-import { BottomModal, Button, Card, Empty } from '../../common/components';
+import { grey600, white } from '../../common/colors';
+import {
+  Button,
+  Empty,
+  Loader,
+  Modal,
+  TextInput,
+  TextView,
+} from '../../common/components';
 import Divider from '../../common/components/Divider';
-import TextView from '../../common/components/TextView';
 import { isIphoneWithNotch } from '../../common/utils';
-import { useApp } from '../../hook';
+import { useAlert, useApp } from '../../hook';
+import { addOrder } from '../Order/graphql/mutations';
+import CartItem from './CartItem';
+import { useMutation } from '@apollo/client';
 
-const Cart: React.FC<any> = props => {
-  const { navigation } = props;
+const CartScreen: React.FC<any> = ({ navigation }) => {
   const app = useApp();
-  const [items, setItems] = useState(app.cartProducts);
+  const alert = useAlert();
+
+  const cartProducts = app.cartProducts();
+
+  const [items, setItems] = useState(cartProducts);
   const [totalPrice, setTotalPrice] = useState(app.cartTotalPrice);
-  const [paymentModal, setPaymentModal] = useState(false);
 
-  //   status: string;
-  //   deliverType: string;
-  //   deliverAddress?: string;
-  //   products: IProduct[];
-  //   totalPrice: Number;
-  //   userId: string;
+  const [deliverType, setDeliverType] = useState('cafe');
+  const [deliverAddress, setDeliverAddress] = useState({
+    address: '',
+    lng: 0.0,
+    lat: 0.0,
+    phone: app?.currentUser?.phoneNumber || '',
+  });
 
-  //   useEffect(()=>{
-  // app.cartProducts
-  //   }, [items])
+  const [variables, setVariables] = useState({
+    deliverType,
+    totalPrice,
+    deliverAddress,
+    items,
+    userId: app.currentUser._id,
+  });
 
-  const updataTotal = (itemTotal: number, type: string) => {
-    if (type === '+') {
-      setTotalPrice(totalPrice + itemTotal);
+  const [stage, setStage] = useState(0);
+  const [isVisible, setVisible] = useState([false, false, false, false]);
+  const [orderVisible, setOrderVisible] = useState(false);
+
+  useEffect(() => {
+    if (stage === 0) {
+      return;
     }
-    if (type === '-') {
-      setTotalPrice(totalPrice - itemTotal);
-    }
-  };
+    renderStages();
+  }, [stage]);
+
+  const [addOrderMutation, { loading }] = useMutation(addOrder);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   const handleRemoveItem = (idx: any) => {
     const temp = [...items];
@@ -44,126 +68,221 @@ const Cart: React.FC<any> = props => {
     setItems(temp);
   };
 
-  return (
-    <SafeAreaView style={styles.container}>
-      {app.cartProducts.length > 0 ? (
-        <>
-          <ScrollView>
-            {items.map((item: any, index: any) => {
-              const placeholder = img.findIndex(
-                el => el.name === 'placeholder',
-              );
-              const product = item?.product;
-              const idx = img.findIndex(el => el.name === product.image);
-
-              const [count, setItemCount] = useState(item?.count);
-              const [itemTotal, setItemTotal] = useState(
-                product?.unitPrice * count,
-              );
-
-              return (
-                <View key={product._id + 'cart' + product.unitPrice}>
-                  <Card style={styles.card}>
-                    <View style={{ width: 70, height: 70 }}>
-                      <Image
-                        style={styles.image}
-                        source={
-                          idx > -1 ? img[idx].source : img[placeholder].source
-                        }
-                      />
-                    </View>
-
-                    {/* INFO */}
-                    <View style={{ width: 170, marginLeft: 10 }}>
-                      <TextView large bold>
-                        {product.name}
-                      </TextView>
-                      <TextView>{itemTotal} ₮</TextView>
-                    </View>
-
-                    {/* BUTTON CONTROLLER */}
-                    <View
-                      style={{
-                        width: 100,
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                      }}>
-                      <Button
-                        text="-"
-                        backgroundColor={count > 1 ? primary : grey400}
-                        onPress={() => {
-                          if (count < 1) {
-                            return;
-                            // handleRemoveItem(index);
-                            // app.removeItem(item);
-                          } else {
-                            app.updateProductCount(product, '-');
-                            app.updateCartTotal();
-
-                            setItemCount(count - 1);
-                            setItemTotal(itemTotal - product.unitPrice);
-                            setTotalPrice(app.cartTotalPrice);
-                            updataTotal(product.unitPrice, '-');
-                          }
-                        }}
-                      />
-                      <View style={{ padding: 5, justifyContent: 'center' }}>
-                        <TextView>{count}</TextView>
-                      </View>
-
-                      <Button
-                        text="+"
-                        backgroundColor={primary}
-                        onPress={() => {
-                          app.updateProductCount(product, '+');
-                          app.updateCartTotal();
-
-                          setItemCount(count + 1);
-                          setItemTotal(itemTotal + product.unitPrice);
-                          setTotalPrice(app.cartTotalPrice);
-                          updataTotal(product.unitPrice, '+');
-                        }}
-                      />
-                    </View>
-                  </Card>
-                </View>
-              );
-            })}
-          </ScrollView>
-
-          <View style={styles.buttonCont}>
-            <Divider />
-            {/* TOTAL PRICE */}
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                padding: 10,
-                marginVertical: 10,
-              }}>
-              <TextView>Нийт</TextView>
-              <TextView bold large>
-                {totalPrice} ₮
-              </TextView>
-            </View>
-
+  const renderStages = () => {
+    if (stage === 1) {
+      return (
+        <Modal
+          isBottom
+          onVisible={() => {
+            setVisible([false, false, false, false]);
+          }}
+          isVisible={isVisible[1]}
+          shadowRadius={3}>
+          <View style={styles.deliverBtns}>
             <Button
-              block
-              text="Төлбөр төлөх"
-              style={{ height: 50 }}
-              onPress={() => setPaymentModal(true)}
+              height={50}
+              style={{ width: 150 }}
+              onPress={() => {
+                setStage(3);
+                setDeliverType('cafe');
+                setVisible([false, false, false, true]);
+              }}
+              text="Кофе шопоос авах"
+            />
+            <Button
+              height={50}
+              style={{ width: 150 }}
+              onPress={() => {
+                setStage(2);
+                setDeliverType('deliver');
+                setVisible([false, false, true, false]);
+              }}
+              text="Хүргэлтээр авах"
             />
           </View>
+        </Modal>
+      );
+    }
+
+    if (stage === 2) {
+      return (
+        <Modal
+          isBottom
+          onVisible={() => {
+            setVisible([false, true, false, false]);
+          }}
+          style={{ height: 600 }}
+          isVisible={isVisible[2]}
+          shadowRadius={3}>
+          <TextInput
+            placeholder={'Хүргүүлэх хаяг'}
+            value={variables.deliverAddress.address}
+            setValue={(text: string) => {
+              setVariables({
+                ...variables,
+                deliverAddress: { ...variables.deliverAddress, address: text },
+              });
+            }}
+          />
+          <TextInput
+            placeholder={'Утасны дугаар'}
+            value={variables.deliverAddress.phone}
+            setValue={(text: string) => {
+              setVariables({
+                ...variables,
+                deliverAddress: { ...variables.deliverAddress, phone: text },
+              });
+            }}
+          />
+          <View
+            style={{
+              width: '100%',
+              position: 'absolute',
+              bottom: isIphoneWithNotch() ? 40 : 30,
+            }}>
+            <Button
+              block
+              height={50}
+              width={100}
+              onPress={() => {
+                setStage(3);
+                setVisible([false, true, false, true]);
+              }}
+              text="Захиалах"
+            />
+          </View>
+        </Modal>
+      );
+    }
+
+    if (stage === 3) {
+      console.log('VAR', variables.items);
+      return (
+        <Modal
+          onVisible={() => {
+            setVisible([false, false, true, false]);
+          }}
+          isVisible={isVisible[3]}
+          shadowRadius={3}>
+          <View
+            style={{
+              width: '100%',
+              alignItems: 'center',
+              flexDirection: 'column',
+            }}>
+            <TextView bold large style={{ marginBottom: 20 }}>
+              Таны захиалга
+            </TextView>
+            {items.map((i: any) => (
+              <>
+                <View
+                  style={[
+                    styles.sb,
+                    {
+                      marginVertical: 10,
+                    },
+                  ]}>
+                  <TextView>{i.product.name}</TextView>
+                  <View style={{ alignItems: 'flex-end' }}>
+                    <TextView>{i.product.unitPrice}</TextView>
+                    <TextView color={grey600} small>
+                      {i.count}ш
+                    </TextView>
+                  </View>
+                </View>
+                <Divider />
+              </>
+            ))}
+            <View style={styles.sb}>
+              <TextView bold>Нийт</TextView>
+              <TextView bold>{totalPrice} ₮</TextView>
+            </View>
+            <View style={{ width: '100%' }}>
+              <Button
+                block
+                isBottom
+                height={50}
+                onPress={() => {
+                  setVariables({
+                    ...variables,
+                    totalPrice,
+                  });
+                  setStage(0);
+                  setVisible([false, false, false, false]);
+
+                  //   alert.success('Done');
+                  //   navigation.navigate('Back');
+                  //app.clearCart();
+
+                  addOrderMutation({ variables })
+                    .then(res => {
+                      if (res.errors) {
+                        console.log('error', res.errors);
+                      }
+                      console.log('done');
+                    })
+                    .catch(e => console.log(e.message));
+                }}
+                text="Захиалах"
+              />
+            </View>
+          </View>
+        </Modal>
+      );
+    }
+    return null;
+  };
+
+  return (
+    <View style={styles.container}>
+      {app.cartProducts().length > 0 ? (
+        <>
+          <ScrollView style={{ padding: 10 }}>
+            {items.map((item: any, index: any) => (
+              <View key={index + 'i'}>
+                <CartItem
+                  item={item}
+                  totalPrice={totalPrice}
+                  setTotalPrice={setTotalPrice}
+                  handleRemoveItem={handleRemoveItem}
+                />
+              </View>
+            ))}
+          </ScrollView>
+
+          {isVisible[3] === false && (
+            <View style={styles.buttonCont}>
+              <Divider />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginVertical: 20,
+                }}>
+                <TextView>Нийт</TextView>
+                <TextView bold large>
+                  {totalPrice} ₮
+                </TextView>
+              </View>
+
+              <Button
+                block
+                text="Дараах"
+                style={{ height: 50 }}
+                onPress={() => {
+                  console.log('d');
+                  setStage(1);
+                  setVisible([false, true, false, false]);
+                }}
+              />
+            </View>
+          )}
         </>
       ) : (
         <Empty />
       )}
-      {paymentModal && (
-        <BottomModal>
-          <TextView>ss</TextView>
-        </BottomModal>
-      )}
-    </SafeAreaView>
+      {renderStages()}
+    </View>
   );
 };
 
@@ -171,23 +290,26 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: white,
-    paddingHorizontal: 10,
   },
   buttonCont: {
     position: 'absolute',
     bottom: 0,
     right: 0,
     width: '100%',
-    paddingHorizontal: 5,
+    paddingHorizontal: 10,
     paddingBottom: isIphoneWithNotch() ? 30 : 20,
   },
-  card: { height: 100, padding: 5 },
-  image: {
+  deliverBtns: {
     width: '100%',
-    height: undefined,
-    aspectRatio: 1,
-    borderRadius: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  sb: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 20,
   },
 });
 
-export default Cart;
+export default CartScreen;

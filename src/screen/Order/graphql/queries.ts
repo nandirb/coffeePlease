@@ -1,31 +1,57 @@
 import { gql } from '@apollo/client';
 
 const orders = gql`
-  query Orders {
-    orders {
+  query Orders($deliverType: String) {
+    orders(deliverType: $deliverType) {
       _id
       createdAt
       status
       deliverType
-      deliverAddress
-      products
+      deliverAddress {
+        lng
+        lat
+        phone
+        address
+      }
       totalPrice
       userId
+      items {
+        product {
+          _id
+          name
+          unitPrice
+          image
+        }
+        count
+      }
     }
   }
 `;
 
 const myOrders = gql`
-  query MyOrders($userId: String) {
+  query myOrders($userId: String!) {
     myOrders(userId: $userId) {
       _id
       createdAt
       status
       deliverType
-      deliverAddress
-      products
+      deliverAddress {
+        address
+        lng
+        lat
+        phone
+      }
       totalPrice
       userId
+      items {
+        product {
+          _id
+          unitPrice
+          name
+          image
+        }
+        count
+      }
     }
   }
 `;

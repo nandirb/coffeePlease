@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useLayoutEffect } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import img from '../../../../assets/images';
 import {
   green500,
@@ -13,7 +14,6 @@ import Card from '../../../common/components/Card';
 import TextView from '../../../common/components/TextView';
 import Touchable from '../../../common/components/Touchable';
 import { deviceWidth, setNavigationHome } from '../../../common/utils';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { HeaderRight } from '../../../common/components';
 
 const AboutScreen: React.FC<any> = ({ navigation, route, dataUser }: any) => {

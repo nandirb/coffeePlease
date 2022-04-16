@@ -10,6 +10,9 @@ import {
 
 import { TAction } from '../../provider/types';
 import { View } from 'react-native';
+import { black, red300, white } from '../colors';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import TextView from './TextView';
 
 type TSnackbar = {
   type?: string;
@@ -21,7 +24,14 @@ type TSnackbar = {
   backgroundColor?: string;
 };
 
-const Snackbar = ({ type, visible, duration, onDismiss }: TSnackbar) => {
+const Snackbar = ({
+  type,
+  visible,
+  duration,
+  onDismiss,
+  children,
+  backgroundColor,
+}: TSnackbar) => {
   const { current: opacity } = useRef(new Animated.Value(0.0));
   const [hidden, setHidden] = useState<boolean>(!visible);
   const hideTimeout = useRef<NodeJS.Timeout>();
@@ -57,7 +67,6 @@ const Snackbar = ({ type, visible, duration, onDismiss }: TSnackbar) => {
         }
       });
     } else {
-      // hide
       if (hideTimeout.current) {
         clearTimeout(hideTimeout.current);
       }
@@ -78,9 +87,21 @@ const Snackbar = ({ type, visible, duration, onDismiss }: TSnackbar) => {
   }
 
   return (
-    <View>
-      <Text>Ene bol alert</Text>
-    </View>
+    <SafeAreaView
+      style={{
+        height: 80,
+        zIndex: 10,
+        elevation: 4,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: backgroundColor,
+        position: 'absolute',
+        top: 0,
+        width: '100%',
+      }}>
+      <TextView color={white}>{children}</TextView>
+    </SafeAreaView>
   );
 };
 

@@ -5,29 +5,17 @@ import { Loader } from '../../common/components';
 import HeaderLeft from '../../common/components/HeaderLeft';
 import { setNavigationHome } from '../../common/utils';
 import { products } from '../store/graphql/queries';
-import Cart from './CartScreen';
+import CartScreen from './CartScreen';
 import { carts } from './graphql/queries';
 
 const CartContainer: React.FC<any> = ({ navigation, route }: any) => {
   useLayoutEffect(() => {
     setNavigationHome({
       navigation,
-      headerLeft: <HeaderLeft back title={'Cart'} />,
+      headerLeft: <HeaderLeft back />,
       headerRight: null,
     });
   }, [navigation]);
-
-  const { data, loading } = useQuery(carts, {
-    fetchPolicy: 'network-only',
-  });
-
-  const { data: dataProducts, loading: loadingProducts } = useQuery(products, {
-    fetchPolicy: 'network-only',
-  });
-
-  if (loading) {
-    return <Loader />;
-  }
 
   const updatedProps = {
     navigation,
@@ -35,7 +23,7 @@ const CartContainer: React.FC<any> = ({ navigation, route }: any) => {
     // dataProducts: dataProducts?.products,
   };
 
-  return <Cart {...updatedProps} />;
+  return <CartScreen {...updatedProps} />;
 };
 
 export default CartContainer;

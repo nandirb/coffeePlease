@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { HeaderRight, Loader } from '../../../common/components';
 import { setNavigationHome } from '../../../common/utils';
 import Store from '../component/Store';
@@ -12,6 +12,7 @@ const StoreContainer: React.FC<any> = ({ navigation, route }: any) => {
       headerRight: <HeaderRight />,
     });
   }, [navigation]);
+
   const { data: dataCategories, loading: loadingCategories } = useQuery(
     categories,
     {

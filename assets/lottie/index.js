@@ -1,6 +1,6 @@
 const lottie = {
   loading: require('./loading.json'),
-  logoAnimation: require('./logo-animation.json'),
+  orderDone: require('./orderDone.json'),
 };
 
 export default lottie;

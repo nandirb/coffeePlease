@@ -12,6 +12,7 @@ import { deviceWidth } from '../utils';
 const HeaderLeft: React.FC<any> = ({
   title,
   back,
+  logo,
   onBack,
   titleOnpress,
 }: IHeaderLeft) => {
@@ -19,7 +20,7 @@ const HeaderLeft: React.FC<any> = ({
 
   return (
     <View style={{ alignItems: 'center', flexDirection: 'row' }}>
-      {back ? (
+      {back && (
         <Touchable
           style={{ paddingHorizontal: 15 }}
           onPress={() => {
@@ -31,7 +32,16 @@ const HeaderLeft: React.FC<any> = ({
           }}>
           <Ionicons name="chevron-back" size={30} color={primary} />
         </Touchable>
-      ) : null}
+      )}
+      {logo && (
+        <Touchable style={{ paddingHorizontal: 15 }}>
+          <Ionicons
+            name="ellipsis-horizontal-outline"
+            size={25}
+            color={primary}
+          />
+        </Touchable>
+      )}
       <TextView
         capitalize
         bold

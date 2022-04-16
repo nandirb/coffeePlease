@@ -9,6 +9,7 @@ import { primary, red50, red500, red700, redA700, white } from '../colors';
 import TextView from './TextView';
 import { View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Button, Modal } from '.';
 
 const HeaderRight: React.FC<any> = ({ logout }: any) => {
   const navigation = useNavigation<any>();
@@ -16,6 +17,9 @@ const HeaderRight: React.FC<any> = ({ logout }: any) => {
   const { signOut } = useAuth();
 
   const [itemCnt, setItemCnt] = useState(app.cartItemCont);
+  const [modal, showModal] = useState(false);
+
+  const modalText = 'Та гарахдаа итгэлтэй байна уу?';
 
   useEffect(() => setItemCnt(app.cartItemCont), [app.cartItemCont]);
   return (
@@ -24,7 +28,7 @@ const HeaderRight: React.FC<any> = ({ logout }: any) => {
         <Touchable
           style={{ paddingHorizontal: 15 }}
           onPress={() => {
-            signOut();
+            showModal(true);
           }}>
           <Ionicons name="log-out-outline" size={26} color={primary} />
         </Touchable>
@@ -55,6 +59,25 @@ const HeaderRight: React.FC<any> = ({ logout }: any) => {
           )}
         </Touchable>
       )}
+      <Modal isVisible={modal} onVisible={showModal}>
+        <TextView> {modalText}</TextView>
+        <View
+          style={{
+            width: '100%',
+            justifyContent: 'space-around',
+            flexDirection: 'row',
+            marginTop: 20,
+          }}>
+          <Button width={100} onPress={() => showModal(false)} text={'Болих'} />
+          <Button
+            width={100}
+            secondary
+            backgroundColor={white}
+            onPress={() => signOut()}
+            text={'Гарах'}
+          />
+        </View>
+      </Modal>
     </>
   );
 };

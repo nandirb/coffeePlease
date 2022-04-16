@@ -9,7 +9,6 @@ import { grey400, primary } from '../common/colors';
 
 import HomeScreen from '../screen/home/Home';
 import LoginScreen from '../screen/about/LoginScreen';
-import AboutScreen from '../screen/about/Profile/AboutScreen';
 import StoreScreen from '../screen/store/container/Store';
 import CartScreen from '../screen/cart/CartContainer';
 
@@ -19,16 +18,14 @@ import Loader from '../common/components/Loader';
 import { AsyncStorage } from 'react-native';
 import { useAlert } from '../hook';
 import { AuthContext } from '../hook/useAuth';
-import Icon from 'react-native-vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconFA from 'react-native-vector-icons/FontAwesome5';
 import IconFeather from 'react-native-vector-icons/Feather';
-import ProfileContainer from '../screen/about/Profile/ProfileContainer';
+import IconM from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import MyOrders from '../screen/Order/Orders';
 import ProductDetailContainer from '../screen/store/container/ProductDetail';
-import { AppContext } from '../provider/AppProvider';
-import OrderDetail from '../screen/cart/OrderDetail';
-import ProfileScreen from '../screen/about/Profile/ProfileScreen';
-Icon.loadFont().then();
+import AboutContainer from '../screen/about/Profile/AboutContainer';
 
 type StackParamList = {
   Login: undefined;
@@ -40,7 +37,6 @@ type StackParamList = {
   MyOrders: undefined;
   Store: undefined;
   Cart: undefined;
-  OrderDetail: undefined;
   ProductDetail: undefined;
 };
 
@@ -63,7 +59,11 @@ function HomeTab() {
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({ focused }) => (
-            <Icon name="home" color={focused ? primary : grey400} size={25} />
+            <Ionicons
+              name="home-outline"
+              color={focused ? primary : grey400}
+              size={23}
+            />
           ),
         }}
       />
@@ -76,7 +76,7 @@ function HomeTab() {
             <IconFeather
               name="coffee"
               color={focused ? primary : grey400}
-              size={25}
+              size={23}
             />
           ),
         }}
@@ -87,21 +87,21 @@ function HomeTab() {
         options={{
           tabBarLabel: 'Store',
           tabBarIcon: ({ focused }) => (
-            <IconFA
-              name="store"
+            <IconM
+              name="storefront-outline"
               color={focused ? primary : grey400}
-              size={20}
+              size={24}
             />
           ),
         }}
       />
       <Tab.Screen
         name="About"
-        component={ProfileContainer}
+        component={AboutContainer}
         options={{
           tabBarLabel: 'About',
           tabBarIcon: ({ focused }) => (
-            <IconFA name="user" color={focused ? primary : grey400} size={22} />
+            <IconFA name="user" color={focused ? primary : grey400} size={20} />
           ),
         }}
       />
@@ -262,17 +262,12 @@ export default function Routes() {
               />
               <RootStack.Screen
                 name="Profile"
-                component={ProfileScreen}
-                options={{ headerShown: true }}
+                component={AboutContainer}
+                options={{ headerShown: false }}
               />
               <RootStack.Screen
                 name="MyOrders"
                 component={MyOrders}
-                options={{ headerShown: true }}
-              />
-              <RootStack.Screen
-                name="OrderDetail"
-                component={OrderDetail}
                 options={{ headerShown: true }}
               />
             </RootStack.Navigator>

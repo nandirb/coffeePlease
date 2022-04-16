@@ -2,11 +2,9 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useLayoutEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import images from '../../../../assets/images';
 import { grey600, white } from '../../../common/colors';
 import { HeaderLeft, HeaderRight } from '../../../common/components';
-import Button from '../../../common/components/Button';
-import ImageView from '../../../common/components/ImageView';
+
 import TextView from '../../../common/components/TextView';
 import { setNavigationHome } from '../../../common/utils';
 

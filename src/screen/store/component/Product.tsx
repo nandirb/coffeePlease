@@ -1,21 +1,23 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-native/no-inline-styles */
-import { useMutation } from '@apollo/client';
 import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import img from '../../../../assets/images';
-import images from '../../../../assets/images';
-import { grey600, primary, white } from '../../../common/colors';
-import { Touchable } from '../../../common/components';
+import { grey600, white } from '../../../common/colors';
+import { Touchable, TextView } from '../../../common/components';
 import Button from '../../../common/components/Button';
-import TextView from '../../../common/components/TextView';
 import { truncate } from '../../../common/utils';
 import { useApp } from '../../../hook';
-import { addCart } from '../../cart/graphql/mutations';
 
 const Product: React.FC<any> = ({ data, name, unitPrice, source, cal, id }) => {
   const idx = img.findIndex(el => el.name === 'placeholder');
   const app = useApp();
+  const itemInput = {
+    id,
+    name,
+    unitPrice,
+    image: data.image,
+  };
 
   return (
     <View style={styles.container}>
@@ -40,13 +42,12 @@ const Product: React.FC<any> = ({ data, name, unitPrice, source, cal, id }) => {
           <Button
             text={'+'}
             onPress={() => {
-              console.log(app.cartItemCont);
               if (app.cartItemCont > 0) {
                 app.addItemCount();
               } else {
                 app.addItemCount();
               }
-              app.addtoCart(data);
+              app.addtoCart(itemInput);
             }}
           />
         </View>

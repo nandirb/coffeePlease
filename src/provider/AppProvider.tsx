@@ -28,30 +28,33 @@ function AppProvider({ children }: any) {
     } else {
       products[idx].count++;
     }
+
+    alert.info(`${p.name} сагсанд нэмэгдлээ`);
   };
 
   const clearCart = () => {
+    setCnt(0);
     addtoCart([]);
   };
+
   const getCartItems = () => {
     return products;
   };
 
-  let totalPrice = 0;
-
-  const [cartTotal, setCartTotal] = useState<any>(totalPrice);
+  const [cartTotal, setCartTotal] = useState<any>(0);
   const updateTotal = () => {
-    products.map((pr: { product: { unitPrice: number }; count: number }) => {
-      console.log('..', pr.count);
-      totalPrice = totalPrice + pr.product.unitPrice * pr.count;
-    });
+    let totalPrice = 0;
+    products.forEach(
+      (pr: { product: { unitPrice: number }; count: number }) => {
+        totalPrice = totalPrice + pr.product.unitPrice * pr.count;
+      },
+    );
     setCartTotal(totalPrice);
   };
 
   useEffect(() => {
     updateTotal();
-    console.log(totalPrice);
-  }, [totalPrice, cnt]);
+  }, [cnt]);
 
   const remItem = (p: any) => {
     const idx = products.findIndex(
@@ -92,7 +95,7 @@ function AppProvider({ children }: any) {
       console.log('updateUnreadNotificationCounts');
     },
     cartItemCont: cnt,
-    cartProducts: products,
+    cartProducts: getCartItems,
     addItemCount: () => setCnt(cnt + 1),
     addtoCart: addCart,
     removeItem: remItem,

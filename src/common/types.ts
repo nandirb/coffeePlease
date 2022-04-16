@@ -85,7 +85,9 @@ export type TMainModal = ModalProps &
     onVisible: SetStateAction<any>;
     style?: StyleProp<ViewStyle>;
     cancelable: boolean;
-    withoutTouch?: boolean;
+    shadowRadius: number;
+    isBottom: boolean;
+    width: string;
   };
 
 export type TAlert = {
@@ -122,6 +124,7 @@ export type IButton = {
 export type IHeaderLeft = {
   title?: string;
   back?: boolean;
+  logo?: boolean;
   onBack?: () => void;
   titleOnpress?: () => void;
 };

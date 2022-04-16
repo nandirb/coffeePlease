@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-native/no-inline-styles */
 import { useMutation } from '@apollo/client';
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import {
   AsyncStorage,
   Image,
@@ -12,25 +12,25 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import TextView from '../../common/components/TextView';
 import useAuth from '../../hook/useAuth';
 import { login, register } from './graphql/mutations';
-import { BottomModal, Modal, Touchable } from '../../common/components';
-import { deviceWidth, ios } from '../../common/utils';
-import {
-  black,
-  grey400,
-  grey800,
-  primary,
-  secondary,
-  white,
-} from '../../common/colors';
+import { Modal, Touchable, TextView } from '../../common/components';
+import { deviceWidth, ios, setNavigationHome } from '../../common/utils';
+import { black, grey800, primary, white } from '../../common/colors';
 import img from '../../../assets/images';
 import { useApp } from '../../hook';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function LoginScreen({ navigation }: any) {
-  const { signedIn, signUp } = useAuth();
+  useLayoutEffect(() => {
+    setNavigationHome({
+      navigation,
+      headerLeft: <></>,
+      headerRight: <></>,
+    });
+  }, []);
 
+  const { signedIn, signUp } = useAuth();
   const app = useApp();
 
   const [variables, setVariables] = useState<any>({
@@ -194,7 +194,11 @@ export default function LoginScreen({ navigation }: any) {
           </Touchable>
 
           {resigterModal && (
-            <BottomModal style={{ flexDirection: 'column' }}>
+            <Modal
+              isBottom
+              isVisible={resigterModal}
+              onVisible={setRegisterModal}
+              style={{ flexDirection: 'column' }}>
               <>
                 <Touchable onPress={() => setRegisterModal(false)}>
                   <TextView>hide</TextView>
@@ -224,7 +228,7 @@ export default function LoginScreen({ navigation }: any) {
                   </TextView>
                 </Touchable>
               </>
-            </BottomModal>
+            </Modal>
           )}
         </View>
       </TouchableWithoutFeedback>
@@ -234,7 +238,7 @@ export default function LoginScreen({ navigation }: any) {
 
 const styles = StyleSheet.create({
   container: {
-    width: deviceWidth,
+    width: '100%',
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
@@ -271,7 +275,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
     marginTop: 10,
     width: 300,
-    height: 50,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

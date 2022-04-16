@@ -1,11 +1,11 @@
-import { useQuery } from '@apollo/client';
 import React from 'react';
+import { useQuery } from '@apollo/client';
 import { Loader } from '../../../common/components';
 import { useApp } from '../../../hook';
 import { userDetail } from '../graphql/queries';
 import AboutScreen from './AboutScreen';
 
-const ProfileContainer: React.FC<any> = ({ navigation, route }: any) => {
+const AboutContainer: React.FC<any> = ({ navigation, route }: any) => {
   const app = useApp();
   const { data, loading } = useQuery(userDetail, {
     variables: {
@@ -26,4 +26,4 @@ const ProfileContainer: React.FC<any> = ({ navigation, route }: any) => {
   return <AboutScreen {...updatedProps} />;
 };
 
-export default ProfileContainer;
+export default AboutContainer;

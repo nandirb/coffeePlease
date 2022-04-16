@@ -23,6 +23,7 @@ const Empty: React.FC<any> = ({
             aspectRatio: 1,
             borderRadius: 10,
             opacity: 0.4,
+            padding: 10,
           }}
         />
       </View>
@@ -35,6 +36,7 @@ const Empty: React.FC<any> = ({
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'center',
