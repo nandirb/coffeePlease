@@ -1,53 +1,28 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import AnimatedLottieView from 'lottie-react-native';
-import lottie from '../../../assets/lottie';
-import { transparent } from '../colors';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
-const Loader = ({ isLottie }: any) => {
+const Loader: React.FC<any> = ({ backgroundColor, style, color }) => {
   return (
-    <View style={styles.container}>
-      {isLottie && (
-        <View style={styles.lottieContainer}>
-          <AnimatedLottieView
-            source={lottie.loading}
-            style={styles.lottie}
-            autoPlay
-          />
-        </View>
-      )}
+    <View style={{ flex: 1 }}>
+      <View
+        style={[
+          styles.container,
+          {
+            backgroundColor: backgroundColor || 'rgba(255, 255, 255, 0.4)',
+          },
+          style,
+        ]}>
+        <ActivityIndicator size="small" color={color || '#5629B6'} />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  lottieContainer: {
-    alignItems: 'center',
-    borderRadius: 15,
-    overflow: 'hidden',
-    backgroundColor: transparent,
-  },
-  splashContainer: {
-    flex: 1,
-  },
-  image: {
-    flex: 1,
-    resizeMode: 'cover',
-    justifyContent: 'center',
-  },
-  statusContainer: {
-    position: 'absolute',
-    bottom: 30,
-    right: 0,
-    left: 0,
-  },
-  lottie: {
-    width: 50,
-    height: 50,
-  },
   container: {
     alignItems: 'center',
+    alignContent: 'center',
     justifyContent: 'center',
     width: '100%',
     height: '100%',

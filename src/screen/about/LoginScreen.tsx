@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-native/no-inline-styles */
 import { useMutation } from '@apollo/client';
@@ -262,10 +263,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-  },
-  lottie: {
-    width: 300,
-    height: 300,
   },
   block: {
     borderRadius: 15,

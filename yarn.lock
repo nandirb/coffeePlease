@@ -1055,6 +1055,13 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
+"@react-native-async-storage/async-storage@^1.17.3":
+  version "1.17.3"
+  resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.17.3.tgz#fa7010aa9b6a811ff653df3698a90d3c173dd6a6"
+  integrity sha512-2dxdlGwBjBP2qYu6F72U7cRRFshISYiNEWCaQNOJtxUERCMaYRWcniYqhL248KSbGUMpRhFCEtliztsiGoYYMA==
+  dependencies:
+    merge-options "^3.0.4"
+
 "@react-native-community/cli-debugger-ui@^5.0.1":
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli-debugger-ui/-/cli-debugger-ui-5.0.1.tgz#6b1f3367b8e5211e899983065ea2e72c1901d75f"
@@ -1208,14 +1215,24 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.11.tgz#2f4c6e10bee0786abff4604e39a37ded6f3980ce"
   integrity sha512-rQfMIGSR/1r/SyN87+VD8xHHzDYeHaJq6elOSCAD+0iLagXkSI2pfA0LmSXP21uw5i3em7GkkRjfJ8wpqWXZNw==
 
-"@react-native-firebase/app@^14.5.0":
-  version "14.7.0"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-14.7.0.tgz#a12f120c2c6a437284a30391cb16670422d48a7e"
-  integrity sha512-/TdFv0L4AOEdKbAqmUu0yDXWq0Viw9sEX5mprPQDQbnctEJVwDLWehJkKx2CMiGeZox7VU2cshBLD0AC82XTtQ==
+"@react-native-firebase/app@^14.8.0":
+  version "14.8.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-14.8.0.tgz#9add2f40776ff07c35114ebbd03928a3db39fcc0"
+  integrity sha512-yBkszXiyFKO8GVPaqdgu1W3AwZC6KvOIIcNMA8fUKW//RTDEBQvdiVJAtwRd/R1nYMPU02Zoq+xN0luBQRjGlQ==
   dependencies:
     "@expo/config-plugins" "^4.0.18"
     opencollective-postinstall "^2.0.1"
     superstruct "^0.6.2"
+
+"@react-native-firebase/in-app-messaging@^14.8.0":
+  version "14.8.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/in-app-messaging/-/in-app-messaging-14.8.0.tgz#22ef017aafa18ffec203e5758f81a2fc41030943"
+  integrity sha512-A+z/ZFhgO1a8ZLIpLRojz8v7BS3WfnHqOe8g+w7EXmBBUH1rYQMpiOphwSDVPlBPkUbJI3+1SWPgQbcTOLkcGQ==
+
+"@react-native-firebase/messaging@^14.8.0":
+  version "14.8.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/messaging/-/messaging-14.8.0.tgz#a0dcab7c8dd2d672eaf2c74d4a071899ffbbab02"
+  integrity sha512-rLwmewwhECAZe16bPMNTZvyg4dZO7/wJCQXJMc06+6LlyrAWIs0FYg2osznHmfmxAfOe7OL4V0LMoWA1Z7Fxhg==
 
 "@react-native/assets@1.0.0":
   version "1.0.0"
@@ -2674,11 +2691,6 @@ decode-uri-component@^0.2.0:
   resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.0.tgz#eb3913333458775cb84cd1a1fae062106bb87545"
   integrity sha1-6zkTMzRYd1y4TNGh+uBiEGu4dUU=
 
-dedent@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/dedent/-/dedent-0.6.0.tgz#0e6da8f0ce52838ef5cec5c8f9396b0c1b64a3cb"
-  integrity sha1-Dm2o8M5Sg471zsXI+TlrDBtko8s=
-
 deep-is@^0.1.3, deep-is@~0.1.3:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/deep-is/-/deep-is-0.1.4.tgz#a6f2dce612fadd2ef1f519b73551f17e85199831"
@@ -3837,7 +3849,7 @@ interpret@^1.0.0:
   resolved "https://registry.yarnpkg.com/interpret/-/interpret-1.4.0.tgz#665ab8bc4da27a774a40584e812e3e0fa45b1a1e"
   integrity sha512-agE4QfB2Lkp9uICn7BAqoscw4SZP9kTE2hxiFI3jBPmXJfdqiahTbUuKGsMoN2GtqL9AxhYioAcVvgsb1HvRbA==
 
-invariant@^2.2.2, invariant@^2.2.4:
+invariant@^2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
   integrity sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==
@@ -4023,6 +4035,11 @@ is-number@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/is-number/-/is-number-7.0.0.tgz#7535345b896734d5f80c4d06c50955527a14f12b"
   integrity sha512-41Cifkg6e8TylSpdtTpeLVMqvSBEVzTttHvERD741+pnZ8ANv0004MRL43QKPDlK9cGvNp6NZWZUBlbGXYxxng==
+
+is-plain-obj@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/is-plain-obj/-/is-plain-obj-2.1.0.tgz#45e42e37fccf1f40da8e5f76ee21515840c09287"
+  integrity sha512-YWnfyRwxL/+SsrWYfOpUtz5b3YD+nyfkHvjbcanzk8zgyO4ASD67uVMRt8k5bM4lLMDnXfriRhOpemw+NfT1eA==
 
 is-plain-object@^2.0.3, is-plain-object@^2.0.4:
   version "2.0.4"
@@ -4877,20 +4894,6 @@ loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.3.1, loose-envify@^1.4
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
 
-lottie-ios@3.2.3:
-  version "3.2.3"
-  resolved "https://registry.yarnpkg.com/lottie-ios/-/lottie-ios-3.2.3.tgz#d5a029ccce611603d178ea7ba725c1446f2310b4"
-  integrity sha512-mubYMN6+1HXa8z3EJKBvNBkl4UoVM4McjESeB2PgvRMSngmJtC5yUMRdhbbrIAn5Liu3hFGao/14s5hQIgtkRQ==
-
-lottie-react-native@4.0.3:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/lottie-react-native/-/lottie-react-native-4.0.3.tgz#2a2548b8fb6d30e45b55714ec57e986e4af6fcb0"
-  integrity sha512-cmMt/HEwTTzF3PQcE4VVl7jpBYC9cZD9pGz7ZLxYV13e5jWBvMCFKsQYHlYAo69fjXZ2YCum1AqEuez6kSbmCA==
-  dependencies:
-    invariant "^2.2.2"
-    prop-types "^15.5.10"
-    react-native-safe-modules "^1.0.3"
-
 lru-cache@^7.4.0:
   version "7.8.1"
   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-7.8.1.tgz#68ee3f4807a57d2ba185b7fd90827d5c21ce82bb"
@@ -4934,6 +4937,13 @@ mdn-data@2.0.14:
   version "2.0.14"
   resolved "https://registry.yarnpkg.com/mdn-data/-/mdn-data-2.0.14.tgz#7113fc4281917d63ce29b43446f701e68c25ba50"
   integrity sha512-dn6wd0uw5GsdswPFfsgMp5NSB0/aDe6fK94YJV/AJDYXL6HVLWBsxeq7js7Ad+mU2K9LAlwpk6kN2D5mwCPVow==
+
+merge-options@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/merge-options/-/merge-options-3.0.4.tgz#84709c2aa2a4b24c1981f66c179fe5565cc6dbb7"
+  integrity sha512-2Sug1+knBjkaMsMgf1ctR1Ujx+Ayku4EdJN4Z+C2+JzoeF7A3OZ9KM2GY0CpQS51NR61LTurMJrRKPhSs3ZRTQ==
+  dependencies:
+    is-plain-obj "^2.1.0"
 
 merge-stream@^2.0.0:
   version "2.0.0"
@@ -6047,13 +6057,6 @@ react-native-safe-area-view@^1.1.1:
   integrity sha512-bbLCtF+tqECyPWlgkWbIwx4vDPb0GEufx/ZGcSS4UljMcrpwluachDXoW9DBxhbMCc6k1V0ccqHWN7ntbRdERQ==
   dependencies:
     hoist-non-react-statics "^2.3.1"
-
-react-native-safe-modules@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/react-native-safe-modules/-/react-native-safe-modules-1.0.3.tgz#f5f29bb9d09d17581193843d4173ad3054f74890"
-  integrity sha512-DUxti4Z+AgJ/ZsO5U7p3uSCUBko8JT8GvFlCeOXk9bMd+4qjpoDvMYpfbixXKgL88M+HwmU/KI1YFN6gsQZyBA==
-  dependencies:
-    dedent "^0.6.0"
 
 react-native-screens@^3.12.0:
   version "3.13.1"

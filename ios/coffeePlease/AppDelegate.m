@@ -1,12 +1,15 @@
 #import "AppDelegate.h"
 
-#if RCT_DEV
-#import <React/RCTDevLoadingView.h>
-#endif
-
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
+
+#import <Firebase.h>
+#import "RNFBMessagingModule.h"
+
+#if RCT_DEV
+#import <React/RCTDevLoadingView.h>
+#endif
 
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
@@ -44,10 +47,11 @@ static void InitializeFlipper(UIApplication *application) {
     #if RCT_DEV
     [bridge moduleForClass:[RCTDevLoadingView class]];
     #endif
-   
-   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
+
+  NSDictionary *appProperties = [RNFBMessagingModule addCustomPropsToUserProps:nil withLaunchOptions:launchOptions];
+  RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"coffeePlease"
-                                            initialProperties:nil];
+                                            initialProperties:appProperties];
 
   if (@available(iOS 13.0, *)) {
       rootView.backgroundColor = [UIColor systemBackgroundColor];

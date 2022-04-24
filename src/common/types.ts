@@ -65,13 +65,6 @@ export type IImageView = {
   height?: number | string | undefined;
 };
 
-export type ILoader = {
-  backgroundColor?: string;
-  isWhite?: boolean;
-  style?: StyleProp<ViewStyle>;
-  isLottie?: boolean;
-};
-
 export type TEmptyView = {
   textStyle?: StyleProp<TextStyle>;
   text?: string;

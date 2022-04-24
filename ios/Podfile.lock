@@ -9,26 +9,67 @@ PODS:
     - React-Core (= 0.64.3)
     - React-jsi (= 0.64.3)
     - ReactCommon/turbomodule/core (= 0.64.3)
-  - Firebase/CoreOnly (8.14.0):
-    - FirebaseCore (= 8.14.0)
-  - FirebaseCore (8.14.0):
+  - Firebase/CoreOnly (8.15.0):
+    - FirebaseCore (= 8.15.0)
+  - Firebase/InAppMessaging (8.15.0):
+    - Firebase/CoreOnly
+    - FirebaseInAppMessaging (~> 8.15.0-beta)
+  - Firebase/Messaging (8.15.0):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (~> 8.15.0)
+  - FirebaseABTesting (8.15.0):
+    - FirebaseCore (~> 8.0)
+  - FirebaseCore (8.15.0):
     - FirebaseCoreDiagnostics (~> 8.0)
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/Logger (~> 7.7)
-  - FirebaseCoreDiagnostics (8.14.0):
+  - FirebaseCoreDiagnostics (8.15.0):
     - GoogleDataTransport (~> 9.1)
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/Logger (~> 7.7)
+    - nanopb (~> 2.30908.0)
+  - FirebaseInAppMessaging (8.15.0-beta):
+    - FirebaseABTesting (~> 8.0)
+    - FirebaseCore (~> 8.0)
+    - FirebaseInstallations (~> 8.0)
+    - GoogleUtilities/Environment (~> 7.7)
+    - nanopb (~> 2.30908.0)
+  - FirebaseInstallations (8.15.0):
+    - FirebaseCore (~> 8.0)
+    - GoogleUtilities/Environment (~> 7.7)
+    - GoogleUtilities/UserDefaults (~> 7.7)
+    - PromisesObjC (< 3.0, >= 1.2)
+  - FirebaseMessaging (8.15.0):
+    - FirebaseCore (~> 8.0)
+    - FirebaseInstallations (~> 8.0)
+    - GoogleDataTransport (~> 9.1)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
+    - GoogleUtilities/Environment (~> 7.7)
+    - GoogleUtilities/Reachability (~> 7.7)
+    - GoogleUtilities/UserDefaults (~> 7.7)
     - nanopb (~> 2.30908.0)
   - glog (0.3.5)
   - GoogleDataTransport (9.1.2):
     - GoogleUtilities/Environment (~> 7.2)
     - nanopb (~> 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/AppDelegateSwizzler (7.7.0):
+    - GoogleUtilities/Environment
+    - GoogleUtilities/Logger
+    - GoogleUtilities/Network
   - GoogleUtilities/Environment (7.7.0):
     - PromisesObjC (< 3.0, >= 1.2)
   - GoogleUtilities/Logger (7.7.0):
     - GoogleUtilities/Environment
+  - GoogleUtilities/Network (7.7.0):
+    - GoogleUtilities/Logger
+    - "GoogleUtilities/NSData+zlib"
+    - GoogleUtilities/Reachability
+  - "GoogleUtilities/NSData+zlib (7.7.0)"
+  - GoogleUtilities/Reachability (7.7.0):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/UserDefaults (7.7.0):
+    - GoogleUtilities/Logger
   - libwebp (1.2.1):
     - libwebp/demux (= 1.2.1)
     - libwebp/mux (= 1.2.1)
@@ -38,10 +79,6 @@ PODS:
   - libwebp/mux (1.2.1):
     - libwebp/demux
   - libwebp/webp (1.2.1)
-  - lottie-ios (3.2.3)
-  - lottie-react-native (4.0.3):
-    - lottie-ios (~> 3.2.3)
-    - React-Core
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
@@ -309,15 +346,25 @@ PODS:
     - React-cxxreact (= 0.64.3)
     - React-jsi (= 0.64.3)
     - React-perflogger (= 0.64.3)
+  - RNCAsyncStorage (1.17.3):
+    - React-Core
   - RNCMaskedView (0.1.11):
     - React
   - RNFastImage (8.5.11):
     - React-Core
     - SDWebImage (~> 5.11.1)
     - SDWebImageWebPCoder (~> 0.8.4)
-  - RNFBApp (14.7.0):
-    - Firebase/CoreOnly (= 8.14.0)
+  - RNFBApp (14.8.0):
+    - Firebase/CoreOnly (= 8.15.0)
     - React-Core
+  - RNFBInAppMessaging (14.8.0):
+    - Firebase/InAppMessaging (= 8.15.0)
+    - React-Core
+    - RNFBApp
+  - RNFBMessaging (14.8.0):
+    - Firebase/Messaging (= 8.15.0)
+    - React-Core
+    - RNFBApp
   - RNGestureHandler (2.3.2):
     - React-Core
   - RNReanimated (2.7.0):
@@ -367,8 +414,6 @@ DEPENDENCIES:
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - lottie-ios (from `../node_modules/lottie-ios`)
-  - lottie-react-native (from `../node_modules/lottie-react-native`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -396,9 +441,12 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - RNFastImage (from `../node_modules/react-native-fast-image`)
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
+  - "RNFBInAppMessaging (from `../node_modules/@react-native-firebase/in-app-messaging`)"
+  - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -410,8 +458,12 @@ SPEC REPOS:
   trunk:
     - boost-for-react-native
     - Firebase
+    - FirebaseABTesting
     - FirebaseCore
     - FirebaseCoreDiagnostics
+    - FirebaseInAppMessaging
+    - FirebaseInstallations
+    - FirebaseMessaging
     - GoogleDataTransport
     - GoogleUtilities
     - libwebp
@@ -429,10 +481,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/React/FBReactNativeSpec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
-  lottie-ios:
-    :path: "../node_modules/lottie-ios"
-  lottie-react-native:
-    :path: "../node_modules/lottie-react-native"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTRequired:
@@ -483,12 +531,18 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/runtimeexecutor"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNCAsyncStorage:
+    :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
   RNFastImage:
     :path: "../node_modules/react-native-fast-image"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
+  RNFBInAppMessaging:
+    :path: "../node_modules/@react-native-firebase/in-app-messaging"
+  RNFBMessaging:
+    :path: "../node_modules/@react-native-firebase/messaging"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNReanimated:
@@ -507,15 +561,17 @@ SPEC CHECKSUMS:
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: c71c5917ec0ad2de41d5d06a5855f6d5eda06971
   FBReactNativeSpec: 0644bcc3a99cb16726e0454b7187bb3055a26acf
-  Firebase: 7e8fe528c161b9271d365217a74c16aaf834578e
-  FirebaseCore: b84a44ee7ba999e0f9f76d198a9c7f60a797b848
-  FirebaseCoreDiagnostics: fd0c8490f34287229c1d6c103d3a55f81ec85712
+  Firebase: 5f8193dff4b5b7c5d5ef72ae54bb76c08e2b841d
+  FirebaseABTesting: 10cbce8db9985ae2e3847ea44e9947dd18f94e10
+  FirebaseCore: 5743c5785c074a794d35f2fff7ecc254a91e08b1
+  FirebaseCoreDiagnostics: 92e07a649aeb66352b319d43bdd2ee3942af84cb
+  FirebaseInAppMessaging: 06cd645581310fe6e3bacf285cccb3bb9bc5c3e0
+  FirebaseInstallations: 40bd9054049b2eae9a2c38ef1c3dd213df3605cd
+  FirebaseMessaging: 5e5118a2383b3531e730d974680954c679ca0a13
   glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
   GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
   libwebp: 98a37e597e40bfdb4c911fc98f2c53d0b12d05fc
-  lottie-ios: c058aeafa76daa4cf64d773554bccc8385d0150e
-  lottie-react-native: 96361a9891cf651534ea35c4f85f33d4cf14ed13
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   PromisesObjC: 99b6f43f9e1044bd87a95a60beff28c2c44ddb72
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
@@ -543,9 +599,12 @@ SPEC CHECKSUMS:
   React-RCTVibration: c7f845861e79eae13dc1e8217a3cf47a3945b504
   React-runtimeexecutor: 493d9abb8b23c3f84e19ae221eeba92cadcb70dc
   ReactCommon: 8fea6422328e2fc093e25c9fac67adbcf0f04fb4
+  RNCAsyncStorage: 005c0e2f09575360f142d0d1f1f15e4ec575b1af
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNFastImage: 1f2cab428712a4baaf78d6169eaec7f622556dd7
-  RNFBApp: 097a31d372b3db15b41c7a1a5c429433b0609e12
+  RNFBApp: dd24402ca1f28a66e45ef51aee8b6fedee51922f
+  RNFBInAppMessaging: eee28068351f80dfabcb73314a6cb0f3d855037a
+  RNFBMessaging: 6c6016cc0b7682abacdfe3f2535134771424f976
   RNGestureHandler: 6e757e487a4834e7280e98e9bac66d2d9c575e9c
   RNReanimated: 93fe36bf01e6bd4346e0ffc9e469ce37a6b2bea9
   RNScreens: 40a2cb40a02a609938137a1e0acfbf8fc9eebf19

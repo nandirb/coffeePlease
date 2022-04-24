@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "754409009594",
+    "firebase_url": "https://betterwe-5c8c6-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "betterwe-5c8c6",
+    "storage_bucket": "betterwe-5c8c6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:754409009594:android:220c23a4ab97296fc22d83",
+        "android_client_info": {
+          "package_name": "com.coffeeplease"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "754409009594-71mme6213abukr38ehc6emrn95p07dkf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAY_u9jN5I8_OH2mb3-_qouXwInewU-keo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "754409009594-71mme6213abukr38ehc6emrn95p07dkf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "754409009594-495spaebjvq1uki9stcc97tndv8drnl7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.betterwe"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

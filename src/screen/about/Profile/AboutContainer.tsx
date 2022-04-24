@@ -16,7 +16,6 @@ const AboutContainer: React.FC<any> = ({ navigation, route }: any) => {
   if (loading) {
     return <Loader />;
   }
-  console.log(data);
 
   const updatedProps = {
     navigation,

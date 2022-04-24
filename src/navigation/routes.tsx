@@ -235,11 +235,6 @@ export default function Routes() {
         {loginState.loginToken !== null ? (
           <AppProvider>
             <RootStack.Navigator>
-              {/* <RootStack.Screen
-            name="Splash"
-            component={SplashScreen}
-            options={{headerShown: false}}
-          /> */}
               <RootStack.Screen
                 name="Back"
                 component={HomeTab}
