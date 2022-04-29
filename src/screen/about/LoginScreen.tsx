@@ -21,14 +21,14 @@ import img from '../../../assets/images';
 import { useApp } from '../../hook';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function LoginScreen({ navigation }: any) {
-  useLayoutEffect(() => {
-    setNavigationHome({
-      navigation,
-      headerLeft: <></>,
-      headerRight: <></>,
-    });
-  }, []);
+export default function LoginScreen() {
+  //   useLayoutEffect(() => {
+  //     setNavigationHome({
+  //       navigation,
+  //       headerLeft: <></>,
+  //       headerRight: <></>,
+  //     });
+  //   }, []);
 
   const { signedIn, signUp } = useAuth();
   const app = useApp();

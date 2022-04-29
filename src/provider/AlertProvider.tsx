@@ -1,8 +1,8 @@
 import React, { useState, createContext } from 'react';
-import { blue500, colorError, colorSuccess, green500 } from '../common/colors';
-import Snackbar from '../common/components/Snackbar';
+import { blue500, colorError, colorSuccess } from '../common/colors';
+import { Snackbar, DURATION } from 'react-native-erxes-ui';
 import { IAlert, TAction, TAlert } from './types';
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
 export const AlertContext = createContext({} as IAlert);
 
 const { Provider } = AlertContext;
@@ -69,15 +69,15 @@ function AlertProvider({ children }: any) {
         type={alertState.type}
         duration={
           alertState.type === 'error'
-            ? Snackbar.DURATION_MEDIUM
+            ? DURATION.DURATION_MEDIUM
             : alertState.type === 'infinity'
-            ? Snackbar.DURATION_INFINITY
-            : Snackbar.DURATION_SHORT
+            ? DURATION.DURATION_INFINITY
+            : DURATION.DURATION_SHORT
         }
+        rightIcon={<Ionicons name="close-outline" size={15} color={'#fff'} />}
         action={alertState.action}
-        backgroundColor={alertState.backgroundColor}>
-        {alertState.message}
-      </Snackbar>
+        message={alertState.message || ''}
+      />
     </>
   );
 }

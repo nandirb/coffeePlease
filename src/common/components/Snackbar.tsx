@@ -1,113 +1,245 @@
-/* eslint-disable react-native/no-inline-styles */
-import React, { useRef, useState, useEffect, useLayoutEffect } from 'react';
-import { Text, Animated } from 'react-native';
-import {
-  DURATION_INFINITY,
-  DURATION_LONG,
-  DURATION_MEDIUM,
-  DURATION_SHORT,
-} from '../constants';
+// /* eslint-disable react-native/no-inline-styles */
+// import React, { useRef, useState, useEffect, useLayoutEffect } from 'react';
 
-import { TAction } from '../../provider/types';
-import { View } from 'react-native';
-import { black, red300, white } from '../colors';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import TextView from './TextView';
+// import { Animated, View } from 'react-native';
 
-type TSnackbar = {
-  type?: string;
-  visible: boolean;
-  action?: TAction;
-  duration: number | typeof DURATION_MEDIUM;
-  onDismiss: () => void;
-  children: any;
-  backgroundColor?: string;
-};
+// import { SafeAreaView } from 'react-native-safe-area-context';
+// import TextView from './TextView';
+// import Touchable from './Touchable';
+// export enum DURATION {
+//   DURATION_SHORT = 1500,
+//   DURATION_MEDIUM = 2500,
+//   DURATION_LONG = 5000,
+//   DURATION_INFINITY = Number.NEGATIVE_INFINITY,
+// }
 
-const Snackbar = ({
-  type,
-  visible,
-  duration,
-  onDismiss,
-  children,
-  backgroundColor,
-}: TSnackbar) => {
-  const { current: opacity } = useRef(new Animated.Value(0.0));
-  const [hidden, setHidden] = useState<boolean>(!visible);
-  const hideTimeout = useRef<NodeJS.Timeout>();
+// export type SnackbarProps = {
+//   visible: boolean;
+//   placement?: 'top' | 'bottom';
+//   type?: 'success' | 'warning' | 'info' | 'error' | string;
+//   duration?: number | DURATION;
+//   message: string;
+//   //   onDismiss: () => void;
+//   //   rightIcon?: JSX.Element;
+//   //   rightIconName?: string;
+//   //   rightIconSize?: number;
+//   //   rightIconColor?: ColorValue | string | undefined;
+//   //   closeIcon?: JSX.Element;
+//   //   closeIconName?: string;
+//   //   closeIconSize?: number;
+//   //   closeIconColor?: ColorValue | string | undefined;
+//   //   textStyle?: StyleProp<TextProps>;
+//   //   wrapperStyle?: StyleProp<ViewStyle>;
+//   //   style?: StyleProp<ViewStyle>;
+//   //   ref?: React.RefObject<View>;
+//   //   theme?: ReactNativeErxes.Theme;
+// };
 
-  useEffect(() => {
-    return () => {
-      if (hideTimeout.current) {
-        clearTimeout(hideTimeout.current);
-      }
-    };
-  }, []);
+// const Snackbar: React.FC<SnackbarProps> = ({
+//   visible,
+//   type = 'info',
 
-  useLayoutEffect(() => {
-    if (visible) {
-      // show
-      if (hideTimeout.current) {
-        clearTimeout(hideTimeout.current);
-      }
-      setHidden(false);
-      Animated.timing(opacity, {
-        toValue: 1,
-        duration: 200,
-        useNativeDriver: true,
-      }).start(({ finished }) => {
-        if (finished) {
-          const isInfinity =
-            duration === Number.POSITIVE_INFINITY ||
-            duration === Number.NEGATIVE_INFINITY;
+//   message,
+//   placement = 'top',
+//   duration = DURATION.DURATION_MEDIUM,
+//   onDismiss,
+//   //   action,
+//   //   rightIconName,
+//   //   rightIconColor,
+//   //   rightIconSize,
+//   //   rightIcon,
+//   //   closeIcon,
+//   ...rest
+// }) => {
+//   const defaultsize = 20;
+//   const { current: opacity } = useRef(new Animated.Value(0.0));
+//   const [hidden, setHidden] = useState<boolean>(!visible);
+//   const hideTimeout = useRef<NodeJS.Timeout>();
+//   const mainColor =
+//     type === 'error'
+//       ? '#FF4949'
+//       : type === 'success'
+//       ? '#17CE65'
+//       : type === 'warning'
+//       ? '#FFC82C'
+//       : '#42a5f5';
 
-          if (finished && !isInfinity) {
-            hideTimeout.current = setTimeout(onDismiss, duration);
-          }
-        }
-      });
-    } else {
-      if (hideTimeout.current) {
-        clearTimeout(hideTimeout.current);
-      }
-      Animated.timing(opacity, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: true,
-      }).start(({ finished }) => {
-        if (finished) {
-          setHidden(true);
-        }
-      });
-    }
-  }, [visible, duration, opacity, onDismiss]);
+//   useEffect(() => {
+//     return () => {
+//       if (hideTimeout.current) {
+//         clearTimeout(hideTimeout.current);
+//       }
+//     };
+//   }, []);
 
-  if (hidden || !type) {
-    return null;
-  }
+//   useLayoutEffect(() => {
+//     if (visible) {
+//       if (hideTimeout.current) {
+//         clearTimeout(hideTimeout.current);
+//       }
+//       setHidden(false);
+//       Animated.timing(opacity, {
+//         toValue: 1,
+//         duration: 200,
+//         useNativeDriver: true,
+//       }).start(({ finished }) => {
+//         if (finished) {
+//           const isInfinity =
+//             duration === Number.POSITIVE_INFINITY ||
+//             duration === Number.NEGATIVE_INFINITY;
 
-  return (
-    <SafeAreaView
-      style={{
-        height: 80,
-        zIndex: 10,
-        elevation: 4,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: backgroundColor,
-        position: 'absolute',
-        top: 0,
-        width: '100%',
-      }}>
-      <TextView color={white}>{children}</TextView>
-    </SafeAreaView>
-  );
-};
+//           if (finished && !isInfinity) {
+//             hideTimeout.current = setTimeout(onDismiss, duration);
+//           }
+//         }
+//       });
+//     } else {
+//       if (hideTimeout.current) {
+//         clearTimeout(hideTimeout.current);
+//       }
+//       Animated.timing(opacity, {
+//         toValue: 0,
+//         duration: 200,
+//         useNativeDriver: true,
+//       }).start(({ finished }) => {
+//         if (finished) {
+//           setHidden(true);
+//         }
+//       });
+//     }
+//   }, [visible, duration, opacity, onDismiss]);
 
-Snackbar.DURATION_SHORT = DURATION_SHORT;
-Snackbar.DURATION_MEDIUM = DURATION_MEDIUM;
-Snackbar.DURATION_LONG = DURATION_LONG;
-Snackbar.DURATION_INFINITY = DURATION_INFINITY;
+//   if (hidden) {
+//     return null;
+//   }
 
-export default Snackbar;
+//   return (
+//     <Touchable
+//       onPress={() => {
+//         // if (!action) {
+//         //   setHidden(true);
+//         // }
+//       }}>
+//       <SafeAreaView
+//         style={[
+//           {
+//             position: 'absolute',
+//             top: placement === 'top' ? 0 : undefined,
+//             bottom: placement === 'bottom' ? 10 : undefined,
+//             left: 3,
+//             width: '100%',
+//             zIndex: 5000,
+//           },
+//         ]}>
+//         <Surface
+//           accessibilityLiveRegion="polite"
+//           style={[
+//             styles.container,
+//             { backgroundColor: mainColor },
+//             {
+//               opacity: opacity,
+//               transform: [
+//                 {
+//                   scale: visible
+//                     ? opacity.interpolate({
+//                         inputRange: [0, 1],
+//                         outputRange: [0.9, 1],
+//                       })
+//                     : 1,
+//                 },
+//               ],
+//             },
+//             rest?.wrapperStyle,
+//           ]}>
+//           <View
+//             style={{
+//               width: action ? '72%' : '100%',
+//               alignItems: 'center',
+//               flexDirection: 'row',
+//             }}>
+//             {rightIconName ||
+//               (rightIcon && (
+//                 <View style={{ marginHorizontal: 5 }}>
+//                   {rightIcon ? (
+//                     rightIcon
+//                   ) : (
+//                     <Icon
+//                       name={rightIconName || ''}
+//                       color={rightIconColor || '#fff'}
+//                       size={rightIconSize || defaultsize}
+//                       source={undefined}
+//                     />
+//                   )}
+//                 </View>
+//               ))}
+//             <TextView
+//               bold
+//               style={[
+//                 styles.content,
+//                 { marginRight: action ? 0 : 16, color: '#fff' },
+//                 rest?.textStyle,
+//               ]}>
+//               {message}
+//             </TextView>
+//             {closeIcon ||
+//               (closeIcon && (
+//                 <View style={styles.overflow}>
+//                   <Touchable onPress={() => setHidden(true)}>
+//                     {closeIcon}
+//                   </Touchable>
+//                 </View>
+//               ))}
+//           </View>
+//           {action && (
+//             <View style={{ justifyContent: 'flex-end' }}>
+//               <Button
+//                 onPress={() => {
+//                   action.onPress && action.onPress();
+//                   onDismiss();
+//                 }}
+//                 color={'rgba(255, 255, 255, 0.6)'}
+//                 textColor={color(mainColor).darken(0.6).rgb().string()}
+//                 style={{
+//                   borderRadius: 8,
+//                 }}>
+//                 {action.label}
+//               </Button>
+//             </View>
+//           )}
+//         </Surface>
+//       </SafeAreaView>
+//     </Touchable>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     margin: 5,
+//     flexDirection: 'row',
+//     paddingLeft: 15,
+//     paddingRight: 5,
+//     paddingVertical: 8,
+//     borderRadius: 5,
+//     width: Dimensions.get('screen').width - 15,
+//     shadowColor: '#000',
+//     shadowOffset: {
+//       width: 0,
+//       height: 0,
+//     },
+//     shadowOpacity: 0.1,
+//     shadowRadius: 7,
+//   },
+//   content: {
+//     marginLeft: 10,
+//     marginVertical: 10,
+//     flexWrap: 'wrap',
+//     flex: 1,
+//   },
+
+//   overflow: {
+//     position: 'absolute',
+//     top: 0,
+//     right: 0,
+//   },
+// });
+// export default Snackbar;
