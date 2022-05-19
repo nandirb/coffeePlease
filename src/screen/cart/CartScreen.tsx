@@ -2,33 +2,36 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Linking, PermissionsAndroid, StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { grey600, white } from '../../common/colors';
 import {
   Button,
   Empty,
   Loader,
-  Modal,
   TextInput,
   TextView,
+  Modal,
 } from '../../common/components';
 import Divider from '../../common/components/Divider';
-import { isIphoneWithNotch } from '../../common/utils';
+import { generateRandomKey, isIphoneWithNotch } from '../../common/utils';
 import { useAlert, useApp } from '../../hook';
 import { addOrder } from '../Order/graphql/mutations';
 import CartItem from './CartItem';
 import { useMutation } from '@apollo/client';
+import { Colors, ScreenUtils } from 'react-native-erxes-ui';
+import QRCode from 'react-native-qrcode-svg';
+import Geolocation from '@react-native-community/geolocation';
 
 const CartScreen: React.FC<any> = ({ navigation }) => {
   const app = useApp();
   const alert = useAlert();
 
-  const cartProducts = app.cartProducts();
+  const cartProducts = app?.cartProducts();
 
+  const [clicked, onClicked] = useState(false);
   const [items, setItems] = useState(cartProducts);
-  const [totalPrice, setTotalPrice] = useState(app.cartTotalPrice);
-
+  const [totalPrice, setTotalPrice] = useState(app?.cartTotalPrice);
   const [deliverType, setDeliverType] = useState('cafe');
   const [deliverAddress, setDeliverAddress] = useState({
     address: '',
@@ -36,48 +39,107 @@ const CartScreen: React.FC<any> = ({ navigation }) => {
     lat: 0.0,
     phone: app?.currentUser?.phoneNumber || '',
   });
-
   const [variables, setVariables] = useState({
     deliverType,
     totalPrice,
     deliverAddress,
     items,
-    userId: app.currentUser._id,
+    userId: app?.currentUser._id,
   });
+  const [doneVisible, setDoneVisible] = React.useState(false);
+  const [locationStatus, setLocationStatus] = useState('');
 
-  const [stage, setStage] = useState(0);
-  const [isVisible, setVisible] = useState([false, false, false, false]);
-  const [orderVisible, setOrderVisible] = useState(false);
+  React.useEffect(() => {
+    const requestLocationPermission = async () => {
+      if (ScreenUtils.isIOS) {
+        getOneTimeLocation();
+        subscribeLocationLocation();
+      } else {
+        try {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          );
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            //To Check, If Permission is granted
+            getOneTimeLocation();
+            subscribeLocationLocation();
+          } else {
+            setLocationStatus('Permission Denied');
+          }
+        } catch (err) {
+          console.warn(err);
+        }
+      }
+    };
+    requestLocationPermission();
+    return () => {
+      Geolocation.clearWatch(watchID);
+    };
+  }, [clicked]);
 
-  useEffect(() => {
-    if (stage === 0) {
-      return;
-    }
-    renderStages();
-  }, [stage]);
-
-  const [addOrderMutation, { loading }] = useMutation(addOrder);
-
-  if (loading) {
-    return <Loader />;
-  }
-
-  const handleRemoveItem = (idx: any) => {
-    const temp = [...items];
-    temp.splice(idx, 1);
-    setItems(temp);
+  const getOneTimeLocation = () => {
+    Geolocation.getCurrentPosition(
+      position => {
+        setVariables({
+          ...variables,
+          deliverAddress: {
+            ...variables.deliverAddress,
+            lng: Number(JSON.stringify(position.coords.longitude)),
+            lat: Number(JSON.stringify(position.coords.latitude)),
+          },
+        });
+        console.log(variables);
+      },
+      error => {
+        setLocationStatus(error.message);
+      },
+      {
+        enableHighAccuracy: false,
+        timeout: 30000,
+        maximumAge: 1000,
+      },
+    );
   };
+
+  const subscribeLocationLocation = () => {
+    console.log('here');
+    watchID = Geolocation.watchPosition(
+      position => {
+        setVariables({
+          ...variables,
+          deliverAddress: {
+            ...variables.deliverAddress,
+            lng: Number(JSON.stringify(position.coords.longitude)),
+            lat: Number(JSON.stringify(position.coords.latitude)),
+          },
+        });
+        console.log(variables);
+      },
+      error => {
+        setLocationStatus(error.message);
+      },
+      {
+        enableHighAccuracy: false,
+        maximumAge: 1000,
+      },
+    );
+  };
+
+  let orderId: string | undefined;
+  const [stage, setStage] = useState(0);
+  const [isVisible, setVisible] = useState([false, false, false, false, false]);
+  const [orderVisible, setOrderVisible] = useState(false);
 
   const renderStages = () => {
     if (stage === 1) {
       return (
         <Modal
-          isBottom
+          bottom
+          style={styles.bottomModal}
           onVisible={() => {
-            setVisible([false, false, false, false]);
+            setVisible([false, false, false, false, false]);
           }}
-          isVisible={isVisible[1]}
-          shadowRadius={3}>
+          isVisible={isVisible[1]}>
           <View style={styles.deliverBtns}>
             <Button
               height={50}
@@ -85,7 +147,7 @@ const CartScreen: React.FC<any> = ({ navigation }) => {
               onPress={() => {
                 setStage(3);
                 setDeliverType('cafe');
-                setVisible([false, false, false, true]);
+                setVisible([false, false, false, true, false]);
               }}
               text="Кофе шопоос авах"
             />
@@ -95,7 +157,7 @@ const CartScreen: React.FC<any> = ({ navigation }) => {
               onPress={() => {
                 setStage(2);
                 setDeliverType('deliver');
-                setVisible([false, false, true, false]);
+                setVisible([false, false, true, false, false]);
               }}
               text="Хүргэлтээр авах"
             />
@@ -107,13 +169,12 @@ const CartScreen: React.FC<any> = ({ navigation }) => {
     if (stage === 2) {
       return (
         <Modal
-          isBottom
+          bottom
           onVisible={() => {
-            setVisible([false, true, false, false]);
+            setVisible([false, true, false, false, false]);
           }}
-          style={{ height: 600 }}
-          isVisible={isVisible[2]}
-          shadowRadius={3}>
+          style={{ height: 600, paddingTop: 10 }}
+          isVisible={isVisible[2]}>
           <TextInput
             placeholder={'Хүргүүлэх хаяг'}
             value={variables.deliverAddress.address}
@@ -134,19 +195,50 @@ const CartScreen: React.FC<any> = ({ navigation }) => {
               });
             }}
           />
+          <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+              
+            <Button
+              center
+              style={{ marginVertical: 20, padding: 10, height: 60 }}
+              width={200}
+              text="Одоогийн байршил руу хүргүүлэх"
+              onPress={() => {
+                onClicked(true);
+                getOneTimeLocation();
+                Linking.openURL(
+                  `maps://maps.apple.com/?ll=${
+                    variables?.deliverAddress?.lat
+                  },${variables?.deliverAddress?.lng}&q=${'destination'}`,
+                ).catch(err => console.error('An error occurred', err));
+              }}
+            />
+          </View>
           <View
             style={{
               width: '100%',
               position: 'absolute',
               bottom: isIphoneWithNotch() ? 40 : 30,
+              alignItems: 'center',
+              flexDirection: 'column',
             }}>
+            <View>
+              <TextView>
+                Lattitude
+                <TextView bold>{variables?.deliverAddress?.lat}</TextView>
+              </TextView>
+              <TextView style={{ marginVertical: 20 }}>
+                Longitude
+                <TextView bold>{variables?.deliverAddress?.lng}</TextView>
+              </TextView>
+            </View>
+
             <Button
-              block
               height={50}
-              width={100}
+              width={300}
               onPress={() => {
                 setStage(3);
-                setVisible([false, true, false, true]);
+                setVisible([false, true, false, true, false]);
+                setDeliverType('deliver');
               }}
               text="Захиалах"
             />
@@ -156,14 +248,14 @@ const CartScreen: React.FC<any> = ({ navigation }) => {
     }
 
     if (stage === 3) {
-      console.log('VAR', variables.items);
       return (
         <Modal
+          cancelable={false}
+          style={{ padding: 15 }}
           onVisible={() => {
-            setVisible([false, false, true, false]);
+            setVisible([false, false, true, false, false]);
           }}
-          isVisible={isVisible[3]}
-          shadowRadius={3}>
+          isVisible={isVisible[3]}>
           <View
             style={{
               width: '100%',
@@ -182,9 +274,9 @@ const CartScreen: React.FC<any> = ({ navigation }) => {
                       marginVertical: 10,
                     },
                   ]}>
-                  <TextView>{i.product.name}</TextView>
+                  <TextView>{i.product?.name}</TextView>
                   <View style={{ alignItems: 'flex-end' }}>
-                    <TextView>{i.product.unitPrice}</TextView>
+                    <TextView>{i.product?.unitPrice}</TextView>
                     <TextView color={grey600} small>
                       {i.count}ш
                     </TextView>
@@ -200,26 +292,22 @@ const CartScreen: React.FC<any> = ({ navigation }) => {
             <View style={{ width: '100%' }}>
               <Button
                 block
-                isBottom
                 height={50}
+                width={300}
                 onPress={() => {
                   setVariables({
                     ...variables,
                     totalPrice,
                   });
-                  setStage(0);
-                  setVisible([false, false, false, false]);
-
-                  //   alert.success('Done');
-                  //   navigation.navigate('Back');
-                  //app.clearCart();
-
+                  setStage(4);
+                  setVisible([false, false, false, false, true]);
+                  setDoneVisible(true);
                   addOrderMutation({ variables })
                     .then(res => {
                       if (res.errors) {
                         console.log('error', res.errors);
                       }
-                      console.log('done');
+                      orderId = res?.data?.addOrder?._id;
                     })
                     .catch(e => console.log(e.message));
                 }}
@@ -230,12 +318,71 @@ const CartScreen: React.FC<any> = ({ navigation }) => {
         </Modal>
       );
     }
+
+    if (stage === 4) {
+      const value = generateRandomKey();
+      return (
+        <Modal
+          isVisible={doneVisible}
+          onVisible={setDoneVisible}
+          cancelable={false}
+          style={{
+            padding: 15,
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}>
+          <TextView xxlarge bold>
+            Захиалга амжилттай
+          </TextView>
+          <TextView color={Colors.grey600} style={{ marginBottom: 20 }}>
+            Захиалгын дугаар: <TextView bold>{value}</TextView>
+          </TextView>
+
+          <QRCode value={orderId} />
+
+          <Button
+            onPress={() => {
+              setDoneVisible(false);
+              setTimeout(() => {
+                alert.success('Захиалга амжилттай');
+                navigation.navigate('Back');
+                app?.clearCart();
+              }, 1500);
+            }}
+            style={{ marginTop: 20, width: 300 }}
+            center
+            height={45}
+            width={300}
+            text={'OK'}
+          />
+        </Modal>
+      );
+    }
     return null;
+  };
+
+  useEffect(() => {
+    if (stage === 0) {
+      return;
+    }
+    renderStages();
+  }, [stage]);
+
+  const [addOrderMutation, { loading }] = useMutation(addOrder);
+
+  if (loading) {
+    return <Loader />;
+  }
+
+  const handleRemoveItem = (idx: any) => {
+    const temp = [...items];
+    temp.splice(idx, 1);
+    setItems(temp);
   };
 
   return (
     <View style={styles.container}>
-      {app.cartProducts().length > 0 ? (
+      {app?.cartProducts().length > 0 ? (
         <>
           <ScrollView style={{ padding: 10 }}>
             {items.map((item: any, index: any) => (
@@ -270,9 +417,8 @@ const CartScreen: React.FC<any> = ({ navigation }) => {
                 text="Дараах"
                 style={{ height: 50 }}
                 onPress={() => {
-                  console.log('d');
                   setStage(1);
-                  setVisible([false, true, false, false]);
+                  setVisible([false, true, false, false, false]);
                 }}
               />
             </View>
@@ -281,7 +427,7 @@ const CartScreen: React.FC<any> = ({ navigation }) => {
       ) : (
         <Empty />
       )}
-      {renderStages()}
+      {renderStages && renderStages()}
     </View>
   );
 };
@@ -309,6 +455,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginVertical: 20,
+  },
+  bottomModal: {
+    height: 120,
+    padding: 18,
   },
 });
 

@@ -1,17 +1,23 @@
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable no-undef */
 import { useQuery } from '@apollo/client';
 import React, { useLayoutEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { grey600, primary, white } from '../../common/colors';
+import { HeaderLeft, Modal } from '../../common/components';
 import {
-  Card,
-  HeaderLeft,
-  Loader,
-  Modal,
   TextView,
-} from '../../common/components';
+  Loader,
+  ExpandableSection,
+  Colors,
+  Divider,
+  Touchable,
+} from 'react-native-erxes-ui';
+import QRCode from 'react-native-qrcode-svg';
 import { setNavigationHome } from '../../common/utils';
 import { useApp } from '../../hook';
 import { myOrders } from './graphql/queries';
+import Color from 'color';
 
 const MyOrders: React.FC<any> = ({ navigation, route }) => {
   useLayoutEffect(() => {
@@ -23,58 +29,104 @@ const MyOrders: React.FC<any> = ({ navigation, route }) => {
   }, [navigation, route]);
 
   const app = useApp();
+  const [modal, setModal] = useState(false);
 
   const { data, loading } = useQuery(myOrders, {
-    variables: { userId: app.currentUser._id },
+    variables: { userId: app?.currentUser._id },
   });
 
   if (loading) {
     <Loader />;
   }
 
-  const [modal, setModal] = useState(false);
-
-  const renderDetail = (items: any) => {
-    return (
-      <Modal isVisible={modal} onVisible={setModal(!modal)} shadowRadius={3}>
-        {items?.map((i: any) => (
-          <View>
-            <View style={styles.row}>
-              <TextView bold>{i?.product.name}: </TextView>
-              <TextView bold color={grey600}>
-                {i?.product.unitPrice} ₮
-              </TextView>
-              <TextView color={primary}> x{i?.count}</TextView>
-            </View>
-          </View>
-        ))}
-      </Modal>
-    );
-  };
+  const [expand, setExpanded] = useState(false);
 
   return (
     <View style={styles.container}>
-      {data?.myOrders?.map((o: any) => (
-        <Card
-          onPress={() => {
-            setModal(true);
-            renderDetail(o.items);
-          }}>
-          <View style={styles.item}>
-            <View style={styles.row}>
-              <TextView bold color={primary}>
-                {o?.totalPrice} ₮
+      {data?.myOrders?.map((o: any, index: any) => (
+        <ExpandableSection
+          key={index}
+          expanded={expand}
+          setExpanded={setExpanded}
+          onPress={() => console.log(expand)}
+          containerStyle={{
+            borderWidth: 1,
+            borderColor: Colors.grey200,
+            borderRadius: 10,
+            marginBottom: 8,
+          }}
+          sectionHeader={
+            <View style={styles.item}>
+              <View style={styles.row}>
+                <TextView bold color={primary}>
+                  {o?.totalPrice} ₮
+                </TextView>
+                <TextView color={primary}> {o?.status}</TextView>
+              </View>
+
+              <TextView xxsmall color={grey600}>
+                {o?.createdAt.substring(0, 25)}
               </TextView>
-              <TextView color={primary}> {o?.status}</TextView>
             </View>
+          }>
+          <Divider style={{ marginVertical: 10 }} />
+          <TextView
+            bold
+            large
+            center
+            style={{ marginStart: 10, marginBottom: 10 }}
+            color={grey600}>
+            {'Захиалгын дэлгэрэнгүй'}
+          </TextView>
+          {o?.items.map(el => {
+            return (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  paddingHorizontal: 10,
+                  paddingVertical: 5,
+                }}>
+                <TextView bold color={Colors.grey700}>
+                  {el?.product?.name}
+                </TextView>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <TextView small color={Colors.grey700}>
+                    {el?.product?.unitPrice + ' x ' + el?.count + ' = '}
+                    <TextView bold>
+                      {el?.product?.unitPrice * el?.count}
+                    </TextView>
+                  </TextView>
+                </View>
+              </View>
+            );
+          })}
+          <TextView
+            bold
+            color={Colors.grey700}
+            style={{ marginStart: 10, marginVertical: 20 }}>
+            {`Хүргэлтийн төрөл: ${o?.deliverType}`}
+          </TextView>
 
-            <TextView xxsmall color={grey600}>
-              {o?.createdAt.substring(0, 25)}
+          <Touchable
+            style={{ height: 50, justifyContent: 'center' }}
+            onPress={() => setModal(!modal)}>
+            <TextView center bold large color={'#FE6E4C'}>
+              QR харах
             </TextView>
-
-            {/* <QRCode value={o._id} /> */}
-          </View>
-        </Card>
+          </Touchable>
+          <Modal
+            isVisible={modal}
+            onVisible={setModal}
+            style={{
+              paddingVertical: 20,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <QRCode size={250} value={o?._id} />
+          </Modal>
+        </ExpandableSection>
       ))}
     </View>
   );

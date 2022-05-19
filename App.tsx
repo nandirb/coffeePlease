@@ -10,10 +10,10 @@ import {
 import { onError } from '@apollo/client/link/error';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
-import React from 'react';
+import React, { useState } from 'react';
 import { LogBox, StatusBar } from 'react-native';
 import Routes from './src/navigation/routes';
-
+import Geolocation from '@react-native-community/geolocation';
 import {} from './src/provider';
 import AlertProvider from './src/provider/AlertProvider';
 

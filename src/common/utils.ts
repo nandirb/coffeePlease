@@ -1,7 +1,7 @@
 import { Dimensions, Platform } from 'react-native';
 
 const ios = Platform.OS === 'ios';
-
+const generateRandomKey = () => Math.random().toString(36).slice(2, 20);
 const setNavigationHome = ({ navigation, headerLeft, headerRight }: any) => {
   navigation.setOptions({
     headerLeft: () => headerLeft,
@@ -77,4 +77,5 @@ export {
   getModifableArray,
   numberWithCommas,
   truncate,
+  generateRandomKey,
 };

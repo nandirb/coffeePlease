@@ -12,9 +12,12 @@ export type TAction = {
 };
 
 export interface IAlert {
+  alert: (message: string, action?: TAction) => void;
   error: (message: string, action?: TAction) => void;
   success: (message: string, action?: TAction) => void;
   info: (message: string, action?: TAction) => void;
+  warn: (message: string, action?: TAction) => void;
+  infinity: (message: string, action?: TAction) => void;
   isShowing: (message: string, action?: TAction) => boolean;
 }
 

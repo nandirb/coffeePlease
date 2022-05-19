@@ -18,20 +18,20 @@ import { Modal, Touchable, TextView } from '../../common/components';
 import { deviceWidth, ios, setNavigationHome } from '../../common/utils';
 import { black, grey800, primary, white } from '../../common/colors';
 import img from '../../../assets/images';
-import { useApp } from '../../hook';
+import { useAlert, useApp } from '../../hook';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function LoginScreen() {
-  //   useLayoutEffect(() => {
-  //     setNavigationHome({
-  //       navigation,
-  //       headerLeft: <></>,
-  //       headerRight: <></>,
-  //     });
-  //   }, []);
+export default function LoginScreen({ navigation }) {
+  useLayoutEffect(() => {
+    setNavigationHome({
+      navigation,
+      headerLeft: <></>,
+      headerRight: <></>,
+    });
+  }, []);
 
   const { signedIn, signUp } = useAuth();
-  const app = useApp();
+  const alert = useAlert();
 
   const [variables, setVariables] = useState<any>({
     email: 'nandir.be@gmail.com',
@@ -68,7 +68,7 @@ export default function LoginScreen() {
         signedIn();
       })
       .catch(() => {
-        console.log('The email address or password you entered is incorrect.');
+        alert.error('The email address or password you entered is incorrect.');
         setLoading(false);
       });
   }
@@ -85,7 +85,7 @@ export default function LoginScreen() {
         signUp();
       })
       .catch(() => {
-        console.log('The email address or password you entered is incorrect.');
+        alert.error('The email address or password you entered is incorrect.');
         setLoading(false);
       });
   }
@@ -195,7 +195,7 @@ export default function LoginScreen() {
 
           {resigterModal && (
             <Modal
-              isBottom
+              bottom
               isVisible={resigterModal}
               onVisible={setRegisterModal}
               style={{ flexDirection: 'column' }}>

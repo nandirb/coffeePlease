@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import { View } from 'react-native';
-import { black, white, primary } from '../colors';
+import { white, primary } from '../colors';
 import Touchable from './Touchable';
 import TextView from './TextView';
 import Ionicons from 'react-native-vector-icons/Ionicons';

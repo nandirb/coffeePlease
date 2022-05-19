@@ -191,13 +191,16 @@ export default function Home({ navigation }: any) {
         />
       </View>
       {modal && (
-        <Modal isVisible={modal} onVisible={setModal} width={'95%'}>
+        <Modal
+          isVisible={modal}
+          onVisible={setModal}
+          style={{ padding: 10, width: '100%' }}>
           <View
             style={{
-              width: '100%',
               justifyContent: 'center',
               flexDirection: 'row',
               marginBottom: 30,
+              paddingHorizontal: 30,
             }}>
             <TextView bold large>
               Coffee, Please?
@@ -205,7 +208,6 @@ export default function Home({ navigation }: any) {
           </View>
           <View
             style={{
-              width: '100%',
               flexDirection: 'row',
               justifyContent: 'space-between',
               marginBottom: 20,
@@ -217,7 +219,6 @@ export default function Home({ navigation }: any) {
           </View>
           <View
             style={{
-              width: '100%',
               flexDirection: 'row',
               justifyContent: 'space-between',
               marginBottom: 20,
@@ -227,15 +228,15 @@ export default function Home({ navigation }: any) {
               75553000
             </TextView>
           </View>
-          <View style={{ width: '100%' }}>
-            <Button
-              icon={'location-outline'}
-              icnColor={white}
-              text={'Байршлуудыг харах'}
-              block
-              onPress={() => openMaps()}
-            />
-          </View>
+
+          <Button
+            containerStyle={{ margin: 10 }}
+            icon={'location-outline'}
+            icnColor={white}
+            text={'Байршлуудыг харах'}
+            block
+            onPress={() => openMaps()}
+          />
         </Modal>
       )}
     </ScrollView>

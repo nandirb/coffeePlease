@@ -1,21 +1,19 @@
 import React, { useState, createContext } from 'react';
-import { blue500, colorError, colorSuccess } from '../common/colors';
-import { Snackbar, DURATION } from 'react-native-erxes-ui';
+import { Snackbar, DURATION, Colors } from 'react-native-erxes-ui';
 import { IAlert, TAction, TAlert } from './types';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 export const AlertContext = createContext({} as IAlert);
-
 const { Provider } = AlertContext;
 
-function AlertProvider({ children }: any) {
-  const initialAlert = {
-    isOpen: false,
-    message: 'This',
-    type: '',
-    backgroundColor: 'transparent',
-    action: undefined,
-  };
+const initialAlert = {
+  isOpen: false,
+  message: '',
+  type: '',
+  backgroundColor: '',
+  action: undefined,
+};
 
+function AlertProvider({ children }: any) {
   const [alertState, setAlertState] = useState<TAlert>(initialAlert);
 
   const onDismissSnackBar = () => {
@@ -25,16 +23,28 @@ function AlertProvider({ children }: any) {
     });
   };
 
+  const alert = (message?: string, action?: TAction) => {
+    show(message, 'simple', Colors.blue500, action);
+  };
+
   const info = (message?: string, action?: TAction) => {
-    show(message, 'info', blue500, action);
+    show(message, 'info', Colors.blue500, action);
   };
 
   const error = (message?: string, action?: TAction) => {
-    show(message, 'error', colorError, action);
+    show(message, 'error', Colors.red400, action);
   };
 
   const success = (message?: string, action?: TAction) => {
-    show(message, 'success', colorSuccess, action);
+    show(message, 'success', Colors.lightGreen500, action);
+  };
+
+  const warn = (message?: string, action?: TAction) => {
+    show(message, 'warn', Colors.amberA400, action);
+  };
+
+  const infinity = (message?: string, action?: TAction) => {
+    show(message, 'infinity', Colors.blue500, action);
   };
 
   const show = (
@@ -54,15 +64,19 @@ function AlertProvider({ children }: any) {
   };
 
   const mContext: IAlert = {
+    alert: (message?: string, action?: TAction) => alert(message, action),
     error: (message?: string, action?: TAction) => error(message, action),
     success: (message?: string, action?: TAction) => success(message, action),
     info: (message?: string, action?: TAction) => info(message, action),
+    warn: (message?: string, action?: TAction) => warn(message, action),
+    infinity: (message?: string, action?: TAction) => infinity(message, action),
     isShowing: () => alertState.isOpen,
   };
 
   return (
     <>
       <Provider value={mContext}>{children}</Provider>
+
       <Snackbar
         visible={alertState.isOpen}
         onDismiss={onDismissSnackBar}
@@ -74,9 +88,22 @@ function AlertProvider({ children }: any) {
             ? DURATION.DURATION_INFINITY
             : DURATION.DURATION_SHORT
         }
-        rightIcon={<Ionicons name="close-outline" size={15} color={'#fff'} />}
+        message={alertState.message}
         action={alertState.action}
-        message={alertState.message || ''}
+        leftIcon={
+          <Ionicons
+            name={
+              alertState.type === 'error'
+                ? 'alert-circle-outline'
+                : alertState.type === 'success'
+                ? 'checkmark-done-circle-outline'
+                : 'information-circle-outline'
+            }
+            style={{ color: Colors.white }}
+            size={18}
+          />
+        }
+        wrapperStyle={{ backgroundColor: alertState.backgroundColor }}
       />
     </>
   );

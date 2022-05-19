@@ -6,7 +6,7 @@ const addOrder = gql`
     $userId: String!
     $deliverAddress: addressInput
     $totalPrice: Int
-    $items: [productInput]
+    $items: [itemInput]
   ) {
     addOrder(
       deliverType: $deliverType
@@ -24,7 +24,6 @@ const addOrder = gql`
         }
         count
       }
-      status
       totalPrice
       _id
     }

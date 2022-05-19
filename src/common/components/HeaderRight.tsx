@@ -10,18 +10,17 @@ import TextView from './TextView';
 import { View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Button, Modal } from '.';
+import { Colors } from 'react-native-erxes-ui';
 
 const HeaderRight: React.FC<any> = ({ logout }: any) => {
   const navigation = useNavigation<any>();
   const app = useApp();
   const { signOut } = useAuth();
 
-  const [itemCnt, setItemCnt] = useState(app.cartItemCont);
+  const [itemCnt, setItemCnt] = useState(app?.cartItemCont);
   const [modal, showModal] = useState(false);
 
-  const modalText = 'Та гарахдаа итгэлтэй байна уу?';
-
-  useEffect(() => setItemCnt(app.cartItemCont), [app.cartItemCont]);
+  useEffect(() => setItemCnt(app?.cartItemCont), [app?.cartItemCont]);
   return (
     <>
       {logout ? (
@@ -60,13 +59,15 @@ const HeaderRight: React.FC<any> = ({ logout }: any) => {
         </Touchable>
       )}
       <Modal isVisible={modal} onVisible={showModal}>
-        <TextView> {modalText}</TextView>
+        <TextView center style={{ margin: 20, color: Colors.grey800 }}>
+          Та гарахдаа итгэлтэй байна уу?
+        </TextView>
         <View
           style={{
             width: '100%',
             justifyContent: 'space-around',
             flexDirection: 'row',
-            marginTop: 20,
+            marginVertical: 10,
           }}>
           <Button width={100} onPress={() => showModal(false)} text={'Болих'} />
           <Button

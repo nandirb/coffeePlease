@@ -9,14 +9,13 @@ const AboutContainer: React.FC<any> = ({ navigation, route }: any) => {
   const app = useApp();
   const { data, loading } = useQuery(userDetail, {
     variables: {
-      _id: app.currentUser._id,
+      _id: app?.currentUser?._id,
     },
   });
 
   if (loading) {
     return <Loader />;
   }
-  console.log(data);
 
   const updatedProps = {
     navigation,

@@ -17,7 +17,7 @@ const CartItem = ({
   const app = useApp();
   const placeholder = img.findIndex(el => el.name === 'placeholder');
   const product = item?.product;
-  const idx = img.findIndex(el => el.name === product.image);
+  const idx = img.findIndex(el => el.name === product?.image);
 
   const [count, setItemCount] = useState(item?.count);
   const [itemTotal, setItemTotal] = useState(product?.unitPrice * count);
@@ -32,7 +32,7 @@ const CartItem = ({
   };
 
   return (
-    <View key={product._id + 'cart' + product.unitPrice}>
+    <View key={product?._id + 'cart' + product?.unitPrice}>
       <Card style={styles.card}>
         <View style={{ width: 70, height: 70 }}>
           <Image
@@ -44,7 +44,7 @@ const CartItem = ({
         {/* INFO */}
         <View style={{ width: 170, marginLeft: 10 }}>
           <TextView large bold>
-            {product.name}
+            {product?.name}
           </TextView>
           <TextView>{itemTotal} ₮</TextView>
         </View>
@@ -63,15 +63,15 @@ const CartItem = ({
               if (count < 1) {
                 return;
                 // handleRemoveItem(index);
-                // app.removeItem(item);
+                // app?.removeItem(item);
               } else {
-                app.updateProductCount(product, '-');
-                app.updateCartTotal();
+                app?.updateProductCount(product, '-');
+                app?.updateCartTotal();
 
                 setItemCount(count - 1);
-                setItemTotal(itemTotal - product.unitPrice);
-                setTotalPrice(app.cartTotalPrice);
-                updataTotal(product.unitPrice, '-');
+                setItemTotal(itemTotal - product?.unitPrice);
+                setTotalPrice(app?.cartTotalPrice);
+                updataTotal(product?.unitPrice, '-');
               }
             }}
           />
@@ -83,13 +83,13 @@ const CartItem = ({
             text="+"
             backgroundColor={primary}
             onPress={() => {
-              app.updateProductCount(product, '+');
-              app.updateCartTotal();
+              app?.updateProductCount(product, '+');
+              app?.updateCartTotal();
 
               setItemCount(count + 1);
-              setItemTotal(itemTotal + product.unitPrice);
-              setTotalPrice(app.cartTotalPrice);
-              updataTotal(product.unitPrice, '+');
+              setItemTotal(itemTotal + product?.unitPrice);
+              setTotalPrice(app?.cartTotalPrice);
+              updataTotal(product?.unitPrice, '+');
             }}
           />
         </View>

@@ -21,8 +21,9 @@ function AppProvider({ children }: any) {
 
   const addCart = (p: any) => {
     const idx = products.findIndex(
-      (pr: { product: { _id: any } }) => pr.product._id === p._id,
+      (pr: { product: { _id: any } }) => pr.product?._id === p._id,
     );
+
     if (idx === -1) {
       addtoCart((oldArray: any) => [...oldArray, { product: p, count: 1 }]);
     } else {
@@ -46,7 +47,7 @@ function AppProvider({ children }: any) {
     let totalPrice = 0;
     products.forEach(
       (pr: { product: { unitPrice: number }; count: number }) => {
-        totalPrice = totalPrice + pr.product.unitPrice * pr.count;
+        totalPrice = totalPrice + pr.product?.unitPrice * pr.count;
       },
     );
     setCartTotal(totalPrice);
@@ -58,14 +59,14 @@ function AppProvider({ children }: any) {
 
   const remItem = (p: any) => {
     const idx = products.findIndex(
-      (pr: { product: { _id: any } }) => pr.product._id === p._id,
+      (pr: { product: { _id: any } }) => pr.product?._id === p._id,
     );
     products.splice(idx, 1);
   };
 
   const updateProductCnt = (p: any, type: string) => {
     const idx = products.findIndex(
-      (pr: { product: { _id: any } }) => pr.product._id === p._id,
+      (pr: { product: { _id: any } }) => pr.product?._id === p._id,
     );
     if (type === '+') {
       products[idx].count++;
